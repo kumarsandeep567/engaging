@@ -1,0 +1,40 @@
+# Create laravel app named 'engaging'
+composer create-project laravel/laravel engaging
+
+# Change .env file to use mysql instead of sqlite
+
+# Migrate the Database to the server
+php artisan migrate
+
+# Start server
+php artisan serve
+
+# Download breeze
+composer require laravel/breeze --dev
+
+# Configure and install Breeze stack
+php artisan breeze:install
+(Choose the following: react -> dark -> Pest)
+
+# Install the following dependencies
+# 1. Headless ui (for tailwindcss UI components without styling)
+# 2. Hero icons (Lightweight SVG icons)
+# 3. Daisy UI (tailwindcss components library)
+# 4. React emoji picker (react based WhatsApp like emojis)
+# 5. React Markdown (to add markdown functionality)
+# 6. UUID (to generate random UUIDs)
+npm install @headlessui/react @heroicons/react daisyui emoji-picker-react react-markdown uuid
+
+# Install Laravel Reverb (to broadcast messages to all users)
+php artisan install:
+
+
+# Create the tables (models) in the database (and generate the migrations as well)
+php artisan make:model Group -m
+php artisan make:model Conversation -m
+php artisan make:model Message -m
+php artisan make:model MessageAttachment -m 
+
+# Create Factories (for Group and Message) and seed some data
+php artisan make:Factory GroupFactory
+php artisan make:Factory MessageFactory
