@@ -23,7 +23,7 @@ class MessageFactory extends Factory
         if ($senderId === 0)
         {
             $senderId = $this->faker->randomElement(
-                User::where('sender_id', '!=', 1)->pluck('id')->toArray()
+                User::where('id', '!=', 1)->pluck('id')->toArray()
             );
             $receiverId = 1;
         } else {

@@ -30,7 +30,7 @@ return new class extends Migration
             $table->rememberToken();
             
             $table->boolean('is_admin')
-                ->default('false');
+                ->default(false);
             
             $table->timestamp('blocked_at')
                 ->nullable();
