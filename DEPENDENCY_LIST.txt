@@ -38,3 +38,12 @@ php artisan make:model MessageAttachment -m
 # Create Factories (for Group and Message) and seed some data
 php artisan make:Factory GroupFactory
 php artisan make:Factory MessageFactory
+
+# Create the HomeController
+php artisan make:controller HomeController
+
+# Start the vite server in a new terminal (to serve React)
+npm run dev
+
+# Start the Laravel Reverb server (in debug mode)
+php artisan reverb:start --debug

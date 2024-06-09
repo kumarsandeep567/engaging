@@ -9,6 +9,4 @@ window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
  * allow your team to quickly build robust real-time web applications.
  */
 
-// Commenting this line for creating the chat page
-// Uncomment when using Laravel reverb
-// import './echo';
+import './echo';
