@@ -16,6 +16,8 @@
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>
+
+    {{-- To use dark mode, add dark to the body class --}}
     <body class="font-sans antialiased">
         @inertia
     </body>

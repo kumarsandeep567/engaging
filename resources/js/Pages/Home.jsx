@@ -1,5 +1,6 @@
 import ChatLayout from "@/Layouts/ChatLayout";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
+import { Head } from '@inertiajs/react';
 
 /**
  * Make Home Layout persistent
@@ -15,6 +16,7 @@ Home.layout = (page) => {
         <AuthenticatedLayout 
             user = {page.props.auth.user}
         >
+            <Head title = "Home" />
             <ChatLayout 
                 children = {page}
             >

@@ -62,9 +62,17 @@ export default function Authenticated({ header, children }) {
                                     </Dropdown.Trigger>
 
                                     <Dropdown.Content>
-                                        <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
+                                        <Dropdown.Link href={route('profile.edit')}>
+                                            Profile
+                                        </Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
+                                        </Dropdown.Link>
+
+                                        {/* TODO: Create a toggle for light/dark theme */}
+                                        <hr />
+                                        <Dropdown.Link as="button">
+                                            Theme
                                         </Dropdown.Link>
                                     </Dropdown.Content>
                                 </Dropdown>
