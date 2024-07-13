@@ -47,3 +47,7 @@ npm run dev
 
 # Start the Laravel Reverb server (in debug mode)
 php artisan reverb:start --debug
+
+# To avoid sensitive data from being exposed in the presence channel (or any other channel)
+# create a resource 
+php artisan make:resource UserResource

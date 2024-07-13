@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Resources\UserResource;
 use Illuminate\Support\Facades\Broadcast;
 
 /**
- * To allow users to use Websockets (via Laravel reverb),
- * create a presence channel to allow users to join and  
- * know about other currently joined users in the channel.
- * Only allow authenticated users to join the channel.
+ * Laravel Reverb (using Websockets)
+ * Create a presence channel that allows authenticated 
+ * users to join and know about other users in the 
+ * channel. 
  */
+
 Broadcast::channel('online', function ($user) {
-    return $user;
+    return $user ? new UserResource($user) : null;
 });

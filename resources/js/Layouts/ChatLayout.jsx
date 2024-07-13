@@ -1,16 +1,24 @@
 import { usePage } from "@inertiajs/react";
+import { useState } from "react";
 import { useEffect } from "react";
 
 const ChatLayout = ({children}) => {
 
     /**
-     * We will define our ChatLayout to mimic the most commonly used 
-     * layout by most of the chat applications, which is a list of 
-     * conversations on the left side of the webpage, and an active 
-     * (or selected) conversation on the right side of the webpage.
+     * Define ChatLayout to mimic the layout used by most 
+     * chat applications, where all conversations are on 
+     * the left side of the page, and an active 
+     * (or selected) conversation is on the right side of 
+     * the page.
      */
 
     const page = usePage();
+
+    // Keep track of online users (as an onject instead of array)
+    const [onlineUsers, setOnlineUsers] = useState({});
+
+    // Will be used as a online status indicator
+    const isUserOnline = (userId) => onlineUsers[userId];
 
     // Combine the users and their messages together
     const conversations = page.props.conversations;
@@ -19,9 +27,19 @@ const ChatLayout = ({children}) => {
     // then selectedConversation will be set
     const selectedConversation = page.props.selectedConversation;
 
+    // Update local conversations everytime a coversation is received
+    const [localconversations, setLocalConversations] = useState([]);
+
+    const [sortedConversations, setSortedConversations] = useState([]);
+
     // Let's log these conversations for now
     console.log("conversations", conversations);
     console.log('selected conversation', selectedConversation);
+
+    // Update localConversations when conversations change
+    useEffect(() => {
+        setLocalConversations(conversations);
+    }, [conversations]);
 
     // Listen when the user goes online or offline
     useEffect(() => {
@@ -39,23 +57,44 @@ const ChatLayout = ({children}) => {
             // the user will receive a list of all users currently on the
             // channel
             .here((users) => {
-                console.log("Users are active", users);
+                const onlineUsersObject = Object.fromEntries(
+                    users.map((user) => [user.id, user])
+                );
+
+                setOnlineUsers((prevOnlineUsers) => {
+                    return {...prevOnlineUsers, ...onlineUsersObject};
+                });
             })
             
-            // When the user is trying to join the presence channel
+            // When the user is trying to join the presence channel,
+            // update the list of onlineUsers
             .joining((user) => {
-                console.log("User is joining...", user);
+                setOnlineUsers((prevOnlineUsers) => {
+                    const updatedUsers = { ...prevOnlineUsers };
+                    updatedUsers[user.id] = user;
+                    return updatedUsers;
+                });
             })
 
-            // When the user is trying to leave the presence channel
+            // When the user is trying to leave the presence channel,
+            // update the list of onlineUsers
             .leaving((user) => {
-                console.log("User is leaving :(", user);
+                setOnlineUsers((prevOnlineUsers) => {
+                    const updatedUsers = {...prevOnlineUsers};
+                    delete updatedUsers[user.id];
+                    return updatedUsers;
+                });
             })
 
             // Log errors, if any
             .error((error) => {
                 console.log("An error occured in the 'online' channel", error);
             })
+        
+        // When the user leaves the channel
+        return () => {
+            Echo.leave("Users are leaving the online channel... Byee!");
+        };
     }, []);
 
     return (
