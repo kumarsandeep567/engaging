@@ -3,7 +3,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { Head } from '@inertiajs/react';
 
 /**
- * Make Home Layout persistent
+ * Create Home Layout as a persistent Layout
  */
 function Home({ auth }) {
     return (
