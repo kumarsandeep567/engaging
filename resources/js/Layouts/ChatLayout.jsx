@@ -28,7 +28,7 @@ const ChatLayout = ({children}) => {
     const selectedConversation = page.props.selectedConversation;
 
     // Update local conversations everytime a coversation is received
-    const [localconversations, setLocalConversations] = useState([]);
+    const [localConversations, setLocalConversations] = useState([]);
 
     const [sortedConversations, setSortedConversations] = useState([]);
 
@@ -40,6 +40,38 @@ const ChatLayout = ({children}) => {
     useEffect(() => {
         setLocalConversations(conversations);
     }, [conversations]);
+
+    // Update sortedConversations when local conversations change
+    useEffect(() => {
+        setSortedConversations(
+
+            // Sort users in the conversation to show blocked 
+            // users at the bottom of the conversation
+            // Blocked users are visible to the group
+            // administrators only
+            localConversations.sort((a, b) => {
+                if (a.blocked_at && b.blocked_at) {
+                    return a.blocked_at > b.blocked_at ? 1 : -1;
+                } else if (a.blocked_at) {
+                    return 1;
+                } else if (b.blocked_at) {
+                    return -1;
+                }
+
+                // Place the conversation (personal or group)
+                // with the latest message at the top
+                if (a.last_message_date && b.last_message_date) {
+                    return b.last_message_date.localeCompare(a.last_message_date);
+                } else if (a.last_message_date) {
+                    return -1;
+                } else if (b.last_message_date) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            })
+        );
+    }, [localConversations]);
 
     // Listen when the user goes online or offline
     useEffect(() => {

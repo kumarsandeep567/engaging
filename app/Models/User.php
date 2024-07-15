@@ -56,4 +56,28 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Group::class, 'group_users');
     }
+
+    /**
+     * 
+     */
+    public static function getUsersExceptUser(User $user_to_exclude)
+    {
+        return $user_to_exclude;
+
+        // Get the ID of the user to exclude
+        $user_id = $user_to_exclude->id;
+
+        $query = User::select([
+            'users.*',
+            'messages.message as last_message',
+            'messages.created_at as last_message_date'
+        ])->where('users.id', '!=', $user_id)
+        ->when(!$user_to_exclude->is_admin, function ($query) {
+            $query->whereNull('users.blocked_at');
+        })
+        ->leftJoin('conversations', function ($join) use ($user_id) {
+            $join->on('conversations.user_id1', '=', 'users.id')
+            ->where('conversations.user_id2', '=', $user_id);
+        });
+    }
 }

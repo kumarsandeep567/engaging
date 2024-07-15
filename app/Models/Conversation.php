@@ -47,4 +47,22 @@ class Conversation extends Model
     {
         return $this->belongsTo(User::class, 'user_id2');
     }
+
+    /**
+     * Return the list of conversations 
+     * to display on the application sidebar
+     * except the current user
+     */
+    public static function getConversationsForSidebar(User $user)
+    {
+        $users = User::getUsersExceptUser($user);
+        $groups = User::getGroupsForUser($user);
+
+        // Convert the $user collection
+        return $users->map(function (User $user) {
+            return $user->toConversationArray();
+        })->map(function (Group $group) {
+            return $group->toConversationArray();
+        });
+    }
 }
