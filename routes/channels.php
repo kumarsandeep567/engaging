@@ -11,5 +11,7 @@ use Illuminate\Support\Facades\Broadcast;
  */
 
 Broadcast::channel('online', function ($user) {
+
+    // Return the UserResource if the user exists
     return $user ? new UserResource($user) : null;
 });
