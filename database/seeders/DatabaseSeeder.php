@@ -2,12 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\Conversation;
+use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Group;
 use App\Models\Message;
-use App\Models\User;
-use Carbon\Carbon;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Conversation;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -35,7 +34,7 @@ class DatabaseSeeder extends Seeder
             'email'     => 'emma@example.com',
             'password'  => bcrypt('password')
         ]);
-        
+
         // Generate another 10 random users
         User::factory(10)->create();
 
@@ -43,14 +42,12 @@ class DatabaseSeeder extends Seeder
         {
             // Create 5 groups where 'owner_id' is 1
             $group = Group::factory()->create([
-                'owner_id' => 1,
+                "owner_id" => 1,
             ]);
 
             // Get 2-5 random users
-            $users = User::inRandomOrder()
-                            ->limit(rand(2, 5))
-                            ->pluck('id');
-            
+            $users = User::inRandomOrder()->limit(rand(2, 5))->pluck("id");
+
             // Add these users to the group (avoid duplicates)
             $group->users()->attach(array_unique([1, ...$users]));
         }
@@ -60,26 +57,29 @@ class DatabaseSeeder extends Seeder
 
         /**
          * Fetch the messages that do not belong to a group chat
-         * (get the messages that belong to a personal conversation 
+         * (get the messages that belong to a personal conversation
          * i.e., 1:1 chat)
          */
-        $messages = Message::whereNull('group_id')
-                            ->orderBy('created_at')
-                            ->get();
-        
-        $conversations = $messages->groupBy(function ($message) {
-            return collect([$message->sender_id, $message->receiver_id])
-            ->sort()
-            ->implode('_');
-        })->map(function ($groupedMessages) {
-            return [
+        $messages = Message::whereNull("group_id")
+            ->orderBy("created_at")
+            ->get();
+
+        $conversations = $messages
+            ->groupBy(function ($message) {
+                return collect([$message->sender_id, $message->receiver_id])
+                    ->sort()
+                    ->implode("_");
+            })
+            ->map(function ($groupedMessages) {
+                return [
                 'user_id1'        => $groupedMessages->first()->sender_id,
                 'user_id2'        => $groupedMessages->first()->receiver_id,
                 'last_message_id' => $groupedMessages->last()->id,
                 'created_at'      => new Carbon(),
                 'updated_at'      => new Carbon()
-            ];
-        })->values();
+                ];
+            })
+            ->values();
 
         Conversation::insertOrIgnore($conversations->toArray());
     }
