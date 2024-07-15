@@ -27,8 +27,8 @@ class UserResource extends JsonResource
             'avatar_url'        => $this->avatar ? Storage::url($this->avatar) : null,
             'name'              => $this->name,
             'email'             => $this->emaiil,
-            // 'updated_at'        => $this->updated_at,
-            // 'created_at'        => $this->created_at,
+            'updated_at'        => $this->updated_at,
+            'created_at'        => $this->created_at,
             'is_admin'          => (bool) $this->is_admin,
 
             // These fields are not available in the database
