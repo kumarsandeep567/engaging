@@ -58,7 +58,7 @@ class User extends Authenticatable
     }
 
     /**
-     * 
+     * Fetch a list of users except the authenticated user
      */
     public static function getUsersExceptUser(User $user_to_exclude)
     {
