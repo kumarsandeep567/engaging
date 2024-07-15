@@ -84,8 +84,29 @@ const DropdownLink = ({ className = '', children, ...props }) => {
     );
 };
 
-Dropdown.Trigger = Trigger;
-Dropdown.Content = Content;
-Dropdown.Link = DropdownLink;
+/**
+ * Create a Button for the Dropdown menu
+ * It is a replica of Dropdown Link but uses
+ * the <button> tag instead of React's <Link>
+ * (to make the usage look cleaner)
+ */
+const DropdownButton = ({ className = '', children, ...props }) => {
+    return (
+        <button
+            {...props}
+            className={
+                'block w-full px-4 py-2 text-start text-sm leading-5 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-800 transition duration-150 ease-in-out ' +
+            className
+        }
+        >
+            {children}
+        </button>
+    );
+};
+
+Dropdown.Trigger    = Trigger;
+Dropdown.Content    = Content;
+Dropdown.Link       = DropdownLink;
+Dropdown.Button     = DropdownButton;
 
 export default Dropdown;

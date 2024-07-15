@@ -4,6 +4,7 @@ import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
+import { useEffect } from 'react';
 
 export default function Authenticated({ header, children }) {
     /**
@@ -14,6 +15,23 @@ export default function Authenticated({ header, children }) {
     const user = page.props.auth.user;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    /**
+     * A switch to toggle between light and dark theme
+     */
+    const [isThemeToggled, setThemeToggled] = useState(false);
+
+    useEffect(() => {
+        if (isThemeToggled) {
+            document.body.classList.add('dark');
+        } else {
+            document.body.classList.remove('dark');
+        }
+    }, [isThemeToggled]);
+
+    const toggleThemeSwitch = () => {
+        setThemeToggled(prevTheme => !prevTheme);
+    }
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -68,12 +86,10 @@ export default function Authenticated({ header, children }) {
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
-
-                                        {/* TODO: Create a toggle for light/dark theme */}
-                                        <hr />
-                                        <Dropdown.Link as="button">
-                                            Theme
-                                        </Dropdown.Link>
+                                        <div className="border-t border-gray-300"></div>
+                                        <Dropdown.Button onClick={toggleThemeSwitch}>
+                                            Theme: {isThemeToggled ? 'Dark' : 'Light'}
+                                        </Dropdown.Button>
                                     </Dropdown.Content>
                                 </Dropdown>
                             </div>
