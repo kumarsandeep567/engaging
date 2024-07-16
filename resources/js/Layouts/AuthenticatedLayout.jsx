@@ -3,6 +3,7 @@ import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
+import ResponsiveNavButton from '@/Components/ResponsiveNavButton';
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
@@ -86,7 +87,7 @@ export default function Authenticated({ header, children }) {
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
                                             Log Out
                                         </Dropdown.Link>
-                                        <div className="border-t border-gray-300"></div>
+                                        <div className="border-t border-gray-200"></div>
                                         <Dropdown.Button onClick={toggleThemeSwitch}>
                                             Theme: {isThemeToggled ? 'Dark' : 'Light'}
                                         </Dropdown.Button>
@@ -135,10 +136,18 @@ export default function Authenticated({ header, children }) {
                         </div>
 
                         <div className="mt-3 space-y-1">
-                            <ResponsiveNavLink href={route('profile.edit')}>Profile</ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('profile.edit')}>
+                                Profile
+                            </ResponsiveNavLink>
                             <ResponsiveNavLink method="post" href={route('logout')} as="button">
                                 Log Out
                             </ResponsiveNavLink>
+                        </div>
+                        <div className="border-t border-gray-200"></div>
+                        <div className="mt-1">
+                            <ResponsiveNavButton onClick={toggleThemeSwitch}>
+                                Theme: {isThemeToggled ? 'Dark' : 'Light'}
+                            </ResponsiveNavButton>
                         </div>
                     </div>
                 </div>
