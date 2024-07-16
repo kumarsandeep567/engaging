@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Group;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Conversation extends Model
 {
@@ -56,13 +58,13 @@ class Conversation extends Model
     public static function getConversationsForSidebar(User $user)
     {
         $users = User::getUsersExceptUser($user);
-        $groups = User::getGroupsForUser($user);
+        $groups = Group::getGroupsForUser($user);
 
         // Convert the $user collection
         return $users->map(function (User $user) {
             return $user->toConversationArray();
-        })->map(function (Group $group) {
+        })->concat($groups->map(function (Group $group) {
             return $group->toConversationArray();
-        });
+        }));
     }
 }
