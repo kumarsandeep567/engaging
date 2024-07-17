@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import ApplicationLogo from '@/Components/ApplicationLogo';
+import ApplicationLogo from '@/Components/App/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
-import ResponsiveNavButton from '@/Components/ResponsiveNavButton';
+import ResponsiveNavButton from '@/Components/App/ResponsiveNavButton';
 import { Link, usePage } from '@inertiajs/react';
 import { useEffect } from 'react';
 
