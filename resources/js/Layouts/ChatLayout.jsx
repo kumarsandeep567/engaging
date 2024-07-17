@@ -1,6 +1,9 @@
 import { usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { useEffect } from "react";
+import { PlusIcon } from "@heroicons/react/24/outline";
+import TextInput from "@/Components/TextInput";
+import ConversationItem from "@/Components/App/ConversationItem";
 
 const ChatLayout = ({children}) => {
 
@@ -73,6 +76,19 @@ const ChatLayout = ({children}) => {
         );
     }, [localConversations]);
 
+    /**
+     * Functionality to search for users and groups by
+     * looking for the search term in the conversation name
+     */
+    const chatSearchBar = (searchEvent) => {
+        const searchTerm = searchEvent.target.value.toLowerCase();
+        setLocalConversations(
+            conversations.filter((conversation) => {
+                return conversation.name.toLowerCase().includes(searchTerm);
+            })
+        );
+    };
+
     // Listen when the user goes online or offline
     useEffect(() => {
 
@@ -131,9 +147,71 @@ const ChatLayout = ({children}) => {
 
     return (
         <>
-            <div>
-                ChatLayout
-                {children}
+            {
+                /**
+                 * Create the ChatLayout two comprise of 2 sections 
+                 * The left section will consist of a list of conversations,
+                 * personal chats and group chats, and the right section
+                 * will display all the messages of the selected chat.
+                */
+            }
+            <div className = "flex flex-1 w-full overflow-hidden">
+                
+                {/* Left section of ChatLayout */}
+                <div className = {
+                    `flex flex-col w-full sm:w-[220px] md:w-[300px] overflow-hidden transition-all 
+                    ${ selectedConversation ? "-ml-[100%] sm:ml-0" : "" }`
+                }>
+                    
+                    {/* Display the conversation heading */}
+                    <div className = "flex items-center justify-between py-2 px-3 text-xl font-medium dark:text-gray-100">
+                        <span>Chats</span>
+
+                        {/* A button to create a new group */}
+                        <div
+                            className = "tooltip tooltip-left"
+                            data-tip = "Create a new group"
+                        >
+                            <button 
+                                className = "text-gray-400 hover:text-gray-200"
+                                onClick = {(ev) =>setShowGroupModal(true)}
+                            >
+                                <PlusIcon className = "w-6 h-6 inline-block ml-2 bg-blue-200 rounded-full" />
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Search bar to search for chats */}
+                    <div className = "p-3">
+                        <TextInput
+                            onKeyUp     = {chatSearchBar}
+                            placeholder = "Search for people or groups"
+                            className   = "w-full" 
+                        />
+                    </div>
+
+                    {/* Display the list of chats (personal and group) here */}
+                    <div className = "flex-1 overflow-auto">
+                        {
+                            sortedConversations && sortedConversations.map((conversation) => {
+                                <ConversationItem
+                                    key = {`
+                                        ${ conversation.is_group ? "group_" : "user_" }
+                                        ${ conversation.id }
+                                    `}
+                                    conversation = {conversation}
+                                    online = {!!isUserOnline(conversation.id)}
+                                    selectedConversation = {selectedConversation}
+                                />
+                            })
+                        }
+                    </div>
+                </div>
+
+                {/* Right section of ChatLayout */}
+                <div className="flex flex-1 flex-col overflow-hidden">
+                    {children}
+                </div>
             </div>
         </>
     );
