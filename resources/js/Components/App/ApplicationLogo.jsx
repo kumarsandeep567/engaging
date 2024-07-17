@@ -1,6 +1,6 @@
 export default function ApplicationLogo(props) {
     /**
-     * Laravel Application Logo
+     * Engaging messaging application Logo
      */
 
     return (
