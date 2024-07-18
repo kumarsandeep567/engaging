@@ -65,7 +65,7 @@ const ConversationItem = ({
             }
             preserveState
             className = {
-                `flex items-center conversation-item gap-2 p-2 text-gray-300 transition-all cursor-pointer border-l-4 hover:bg-black/30 ` +
+                "flex items-center conversation-item gap-2 p-2 text-gray-800 transition-all cursor-pointer border-l-4 hover:bg-black/10 dark:text-gray-100 dark:hover:bg-blue-900" +
                 classes + (
                     conversation.is_user && currentUser.is_admin
                     ? " pr-2"
@@ -73,6 +73,12 @@ const ConversationItem = ({
                 )
             }
         >
+            {/* 
+                If the conversation is a user then
+                show the user avatar
+            */}
+            {conversation.is_user && <UserAvatar user={conversation} online={online}/>}
+
             {/* 
                 If the conversation is a group then
                 show the group avatar
@@ -89,6 +95,7 @@ const ConversationItem = ({
                     )
                 }
             >
+                {/* Display the conversation name and last message date */}
                  <div
                     className = "flex items-center justify-between gap-1"
                 >
@@ -102,6 +109,8 @@ const ConversationItem = ({
                         </span>
                     }
                 </div>
+
+                {/* Show the last message if the last message date exists */}
                 { conversation.last_message_date && (
                     <p className="text-xs text-nowrap overflow-hidden text-ellipsis">
                         {conversation.last_message}
@@ -111,7 +120,7 @@ const ConversationItem = ({
             </div>
 
             {/* Display the additional options for administrator users */}
-            { currentUser.is_admin && currentUser.is_user && (
+            { currentUser.is_admin && conversation.is_user && (
                 <UserOptionsDropdown conversation = {conversation} />
             )}
         </Link>
