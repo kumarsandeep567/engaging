@@ -39,11 +39,6 @@ const ChatLayout = ({children}) => {
     console.log("conversations", conversations);
     console.log('selected conversation', selectedConversation);
 
-    // Update localConversations when conversations change
-    useEffect(() => {
-        setLocalConversations(conversations);
-    }, [conversations]);
-
     // Update sortedConversations when local conversations change
     useEffect(() => {
         setSortedConversations(
@@ -75,6 +70,11 @@ const ChatLayout = ({children}) => {
             })
         );
     }, [localConversations]);
+
+    // Update localConversations when conversations change
+    useEffect(() => {
+        setLocalConversations(conversations);
+    }, [conversations]);
 
     /**
      * Functionality to search for users and groups by
@@ -176,7 +176,7 @@ const ChatLayout = ({children}) => {
                                 className = "text-gray-400 hover:text-gray-200"
                                 onClick = {(ev) =>setShowGroupModal(true)}
                             >
-                                <PlusIcon className = "w-6 h-6 inline-block ml-2 bg-blue-200 rounded-full" />
+                                <PlusIcon className = "w-6 h-6 inline-block ml-2 bg-gray-300 rounded-md" />
                             </button>
                         </div>
                     </div>
@@ -191,20 +191,19 @@ const ChatLayout = ({children}) => {
                     </div>
 
                     {/* Display the list of chats (personal and group) here */}
-                    <div className = "flex-1 overflow-auto">
-                        {
-                            sortedConversations && sortedConversations.map((conversation) => {
-                                <ConversationItem
-                                    key = {`
-                                        ${ conversation.is_group ? "group_" : "user_" }
-                                        ${ conversation.id }
-                                    `}
-                                    conversation = {conversation}
-                                    online = {!!isUserOnline(conversation.id)}
-                                    selectedConversation = {selectedConversation}
-                                />
-                            })
-                        }
+                    <div className = "flex-1 overflow-auto lol">
+                        {sortedConversations.map((conversation) => (
+                            <ConversationItem
+                                key={`${
+                                    conversation.is_group
+                                    ? "group_"
+                                    : "user_"
+                                }${conversation.id}`}
+                                conversation={conversation}
+                                online={!!isUserOnline(conversation.id)}
+                                selectedConversation={selectedConversation} 
+                            />
+                        ))}
                     </div>
                 </div>
 
