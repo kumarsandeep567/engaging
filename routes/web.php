@@ -10,7 +10,17 @@ use App\Http\Controllers\ProfileController;
  * Allow verified users to access the dashboard
  */
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/', [HomeController::class, 'home'])->name('dashboard');
+    
+    Route::get('/user/{user}', function () {
+
+    })->name('chat.user');
+
+    Route::get('/group/{group}', function () {
+
+    })->name('chat.group');
+
 });
 
 // Route::get('/dashboard', function () {
