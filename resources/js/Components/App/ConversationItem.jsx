@@ -120,9 +120,10 @@ const ConversationItem = ({
             </div>
 
             {/* Display the additional options for administrator users */}
-            { currentUser.is_admin && conversation.is_user && (
-                <UserOptionsDropdown conversation = {conversation} />
-            )}
+            { currentUser.is_admin && conversation.is_user
+                ? <UserOptionsDropdown conversation = {conversation} />
+                : ''
+            }
         </Link>
     );
 };
