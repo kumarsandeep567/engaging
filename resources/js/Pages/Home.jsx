@@ -66,7 +66,7 @@ function Home({ selectedConversation = null, messages = null }) {
                         {/* If no messages exist in the conversation */}
                         {localMessages.length === 0 && (
                             <div className="flex justify-center items-center h-full">
-                                <div className="text-lg">
+                                <div className="text-xl text-gray-500">
                                     This seems like a new chat. Say something nice ...
                                 </div>
                             </div>
