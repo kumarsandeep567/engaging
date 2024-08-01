@@ -23,9 +23,8 @@ class Conversation extends Model
     ];
 
     /**
-     * A conversation must have a 'last_message_id' to
-     * keep track of the last message that was sent in the
-     * conversation.
+     * A conversation must have a 'last_message_id' to keep track of the last 
+     * message that was sent in the conversation.
      */
     public function lastMessage() 
     {
@@ -51,8 +50,7 @@ class Conversation extends Model
     }
 
     /**
-     * Return the list of conversations 
-     * to display on the application sidebar
+     * Return the list of conversations to display on the application sidebar
      * except the current user
      */
     public static function getConversationsForSidebar(User $user)
@@ -63,8 +61,45 @@ class Conversation extends Model
         // Convert the $user collection
         return $users->map(function (User $user) {
             return $user->toConversationArray();
-        })->concat($groups->map(function (Group $group) {
+        })
+        ->concat($groups->map(function (Group $group) {
             return $group->toConversationArray();
         }));
+    }
+
+    /**
+     * Find the conversation with the given sender and receipent, and
+     * update the conversation with the freshly sent message.
+     */
+    public static function updateConversationWithMessage($userId1, $userId2, $message)
+    {
+
+        // Find the conversation
+        $conversation = Conversation::where(function ($query) use ($userId1, $userId2) {
+            $query->where('user_id1', $userId1)
+            ->where('user_id2', $userId2);
+        })
+        ->orWhere(function ($query) use ($userId1, $userId2) {
+            $query->where('user_id1', $userId2)
+            ->where('user_id2', $userId1);
+        })
+        ->first();
+
+        // If the conversation exists, then update it.
+        // If not, then create one.
+        if ($conversation)
+        {
+            $conversation->update([
+                'last_message_id' => $message->id
+            ]);
+        }
+        else
+        {
+            Conversation::create([
+                'user_id1'          => $userId1,
+                'user_id2'          => $userId2,
+                'last_message_id'   => $message->id
+            ]);
+        }
     }
 }

@@ -69,8 +69,7 @@ class Group extends Model
     }
 
     /**
-     * Convert the group details collection to
-     * an array
+     * Convert the group details collection to an array
      */
     public function toConversationArray() 
     {
@@ -88,5 +87,18 @@ class Group extends Model
             'last_message'      => $this->last_message,
             'last_message_date' => $this->last_message_date 
         ];
+    }
+
+    /**
+     * Find the group with the given groupId, and update the group conversation
+     * with the recently sent message. If the group does not exist, then
+     * create one.
+     */
+    public static function updateGroupWithMessage($groupId, $message)
+    {
+        return self::updateOrCreate(
+            ['id'               => $groupId],
+            ['last_message_id'  => $message->id]
+        );
     }
 }
