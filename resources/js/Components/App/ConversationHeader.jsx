@@ -1,5 +1,5 @@
 import { Link, usePage } from "@inertiajs/react";
-import { ArrowLeftIcon } from "@heroicons/react/24/solid";
+import { ChevronLeftIcon } from "@heroicons/react/24/solid";
 import UserAvatar from "./UserAvatar";
 import GroupAvatar from "./GroupAvatar";
 
@@ -21,7 +21,7 @@ const ConversationHeader = ({selectedConversation}) => {
                         >
 
                             {/* Show the back button */}
-                            <ArrowLeftIcon className="w-6" />
+                            <ChevronLeftIcon className="w-6" />
                         </Link>
 
                         {/* Show the user avatar for personal chats */}
