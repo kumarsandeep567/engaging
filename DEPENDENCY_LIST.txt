@@ -51,3 +51,26 @@ php artisan reverb:start --debug
 # To avoid sensitive data from being exposed in the presence channel (or any other channel)
 # create a resource 
 php artisan make:resource UserResource
+
+# Create the messages controller
+php artisan make:controller MessageController
+
+# Create the request class (for messages)
+php artisan make:request StoreMessageRequest
+
+# Create the message resource
+php artisan make:resource MessageResource
+
+# Create a Websocket event that will be used to push information to the browser
+php artisan make:event SocketMessage
+
+# Create the message attachment resource
+php artisan make:resource MessageAttachmentResource
+
+# Create a message observer to delete the message's attachments if a message
+# is deleted
+php artisan make:observer MessageObserver
+
+
+Site wide dark theme
+https://daisyui.com/components/theme-controller/
