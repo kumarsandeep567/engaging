@@ -47,7 +47,7 @@ const MessageItem = ({ message }) => {
             {/* Set the background color for the chat bubble */}
             <div
                 className = {
-                    "chat-bubble w-2/4 " + (
+                    "chat-bubble w-3/4 md:w-1/2  " + (
                         message.sender_id === currentUser.id
                         ? " bg-sky-200"
                         : ' bg-gray-200'
