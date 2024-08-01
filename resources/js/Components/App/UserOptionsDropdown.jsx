@@ -6,7 +6,13 @@
  */
 
 import { Menu, Transition } from "@headlessui/react";
-import { EllipsisVerticalIcon, ExclamationTriangleIcon, NoSymbolIcon, ShieldCheckIcon, ShieldExclamationIcon } from "@heroicons/react/24/solid";
+import { 
+    EllipsisVerticalIcon, 
+    ExclamationTriangleIcon, 
+    NoSymbolIcon, 
+    ShieldCheckIcon, 
+    ShieldExclamationIcon 
+} from "@heroicons/react/24/solid";
 import axios from "axios";
 import { Fragment } from "react";
 
@@ -16,8 +22,6 @@ export default function UserOptionsDropdown({ conversation }) {
     const changeUserRole = () => {
 
         // Send a post request to change user role and show notification on success
-        console.log("Changing user role...");
-
         if ( !conversation.is_user ) {
             return;
         }
@@ -35,8 +39,6 @@ export default function UserOptionsDropdown({ conversation }) {
     const BlockUser = () => {
 
         // Send a post request to block the user and show notification on success
-        console.log("Blocking user ...");
-
         if ( !conversation.is_user ) {
             return;
         }
@@ -50,13 +52,11 @@ export default function UserOptionsDropdown({ conversation }) {
         });
     };
 
-    console.log("In UserOPtionsdropdown");
-
     return (
         <div>
             <Menu as = "div" className = "relative inline-block text-left">
                 <div>
-                    <Menu.Button className = "flex justify-center items-center w-8 h-8 rounded-full hover:bg-black/40">
+                    <Menu.Button className = "flex justify-center items-center w-8 h-8 rounded-full hover:bg-black/20">
                         <EllipsisVerticalIcon className = "w-5 h-5" />
                     </Menu.Button>
                 </div>

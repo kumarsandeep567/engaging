@@ -33,7 +33,7 @@ const UserAvatar = ({ user, online = null, profile = false }) => {
                 placeholder with the user's initials
             */}
             {!user.avatar_url && (
-                <div className = {`chat-image avatar placeholder ${onlineClass}`}>
+                <div className = {`chat-image avatar select-none placeholder ${onlineClass}`}>
                     <div className = {`bg-gray-300 text-gray-800 rounded-full ${sizeClass} text-center`}>
                         <span className = "text-xl">
                             {user.name.substring(0, 1)}
