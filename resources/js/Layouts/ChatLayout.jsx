@@ -35,10 +35,6 @@ const ChatLayout = ({children}) => {
 
     const [sortedConversations, setSortedConversations] = useState([]);
 
-    // Let's log these conversations for now
-    console.log("conversations", conversations);
-    console.log('selected conversation', selectedConversation);
-
     // Update sortedConversations when local conversations change
     useEffect(() => {
         setSortedConversations(
@@ -165,7 +161,7 @@ const ChatLayout = ({children}) => {
                     
                     {/* Display the conversation heading */}
                     <div className = "flex items-center justify-between py-2 px-3 text-xl font-medium dark:text-gray-100">
-                        <span>Chats</span>
+                        <span className="select-none">Chats</span>
 
                         {/* A button to create a new group */}
                         <div
