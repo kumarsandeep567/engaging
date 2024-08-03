@@ -2,6 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import UserAvatar from "@/Components/App/UserAvatar";
 import GroupAvatar from "@/Components/App/GroupAvatar";
 import UserOptionsDropdown from "@/Components/App/UserOptionsDropdown";
+import formatMessageDate from "@/helpers";
 
 /**
  * A custom component for rendering the list of 
@@ -23,7 +24,7 @@ const ConversationItem = ({
 
     // List of TailwindCSS classes that will be
     // dynamically added to the component
-    let classes = " border-transparent";
+    let classes = " border-transparent ";
 
     if (selectedConversation) {
 
@@ -34,17 +35,17 @@ const ConversationItem = ({
             !conversation.is_group &&
             selectedConversation.id == conversation.id
         ) {
-            classes = `border-blue-200 bg-black/20`
+            classes = ` border-blue-400 bg-black/10`
         }
 
         // Apply custom classes if the selected conversation
         // is a group 
         if (
-            !selectedConversation.is_group &&
-            !conversation.is_group &&
+            selectedConversation.is_group &&
+            conversation.is_group &&
             selectedConversation.id == conversation.id
         ) {
-            classes = `border-green-200 bg-black/20`
+            classes = ` border-teal-400 bg-black/10`
         }
     }
 
@@ -65,7 +66,7 @@ const ConversationItem = ({
             }
             preserveState
             className = {
-                "flex items-center conversation-item gap-2 p-2 text-gray-800 transition-all cursor-pointer border-l-4 hover:bg-black/10 dark:text-gray-100 dark:hover:bg-blue-900" +
+                "flex items-center conversation-item gap-2 p-2 text-gray-800 transition-all cursor-pointer border-l-4 hover:bg-black/10 dark:text-gray-100 dark:hover:bg-sky-900" +
                 classes + (
                     conversation.is_user && currentUser.is_admin
                     ? " pr-2"
@@ -105,7 +106,7 @@ const ConversationItem = ({
                     {
                         conversation.last_message_date &&
                         <span className="text-nowrap">
-                            {conversation.last_message_date}
+                            {formatMessageDate(conversation.last_message_date)}
                         </span>
                     }
                 </div>
