@@ -11,7 +11,6 @@ import formatMessageDate from "@/helpers";
 
 const MessageItem = ({ message }) => {
     const currentUser = usePage().props.auth.user;
-    console.log(message);
 
     return (
 
@@ -31,9 +30,8 @@ const MessageItem = ({ message }) => {
 
             <div className="chat-header select-none">
                 
-                {/* Show the sender's name */}
-                { 
-                    message.sender_id !== currentUser.id 
+                {/* Show the sender's name in group chats */}
+                { message.group_id && (message.sender_id !== currentUser.id)
                     ? message.sender.name
                     : ''
                 }
@@ -47,7 +45,7 @@ const MessageItem = ({ message }) => {
             {/* Set the background color for the chat bubble */}
             <div
                 className = {
-                    "chat-bubble w-3/4 md:w-1/2  " + (
+                    "chat-bubble w-auto max-w-sm md:max-w-xl min-w-0  " + (
                         message.sender_id === currentUser.id
                         ? " bg-sky-200"
                         : ' bg-gray-200'
