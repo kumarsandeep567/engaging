@@ -6,25 +6,70 @@ import ApplicationLogo from '@/Components/App/ApplicationLogo';
 import ConversationHeader from "@/Components/App/ConversationHeader";
 import MessageItem from "@/Components/App/MessageItem";
 import MessageInput from "@/Components/App/MessageInput";
+import { useEventBus } from "@/EventBus";
 
 /**
  * Create Home Layout as a persistent Layout to show the conversation sidebar
  * and a placeholder if no conversation is selected.
  */
 function Home({ selectedConversation = null, messages = null }) {
+
     // Read the application name
     const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
+    // Load the messages in the browser
     const [localMessages, setLocalMessages] = useState([]);
     const messagesCtrRef = useRef(null);
+
+    // Use the Event Bus for creating the unsubscribe event handlers
+    const { on } = useEventBus();
+
+    const messageCreated = (message) => {
+
+        /**
+         * If the selected conversation is a group, and a new message is 
+         * received in that group, then update the group chat. 
+         */
+        if (
+            selectedConversation &&
+            selectedConversation.is_group &&
+            selectedConversation.id == message.group_id
+        ) {
+            setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+
+        /**
+         * If the selected conversation is a personal chat, and a new message  
+         * is received, then update the personal chat. 
+         */
+        if (
+            selectedConversation &&
+            selectedConversation.is_user && (
+                selectedConversation.id == message.sender_id ||
+                selectedConversation.id == message.receiver_id
+            )
+        ) {
+            setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+    };
 
     // When the selected conversation changes, scroll to the bottom after 10ms
     useEffect(() => {
         setTimeout(() => {
-            messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+            if (messagesCtrRef.current) {
+                messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+            }
         }, 10);
+
+        // Create a handler to unsubscribe from the broadcast channel
+        const offCreated = on("message.created", messageCreated);
+
+        return () => {
+            offCreated();
+        };
     });
 
+    // Load the messages, but in reverse order (latest at the bottom)
     useEffect(() => {
         setLocalMessages(
             messages

@@ -1,11 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ApplicationLogo from '@/Components/App/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import ResponsiveNavButton from '@/Components/App/ResponsiveNavButton';
 import { Link, usePage } from '@inertiajs/react';
-import { useEffect } from 'react';
+import { useEventBus } from '@/EventBus';
 
 export default function Authenticated({ header, children }) {
     /**
@@ -14,13 +14,15 @@ export default function Authenticated({ header, children }) {
      */
     const page = usePage();
     const user = page.props.auth.user;
+    const conversations = page.props.conversations;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
 
-    /**
-     * A switch to toggle between light and dark theme
-     */
+    // A switch to toggle between light and dark theme
     const [isThemeToggled, setThemeToggled] = useState(false);
+
+    // Use the Event Bus for creating broadcasting events
+    const { emit } = useEventBus();
 
     useEffect(() => {
         if (isThemeToggled) {
@@ -33,6 +35,67 @@ export default function Authenticated({ header, children }) {
     const toggleThemeSwitch = () => {
         setThemeToggled(prevTheme => !prevTheme);
     }
+
+    // Watch for conversations updates on the broadcast channel.
+    useEffect(() => {
+        conversations.forEach((conversation) => {
+            let channel = `message.group.${conversation.id}`
+
+            if (conversation.is_user) {
+                channel = `message.user.${[
+                    parseInt(user.id),
+                    parseInt(conversation.id)
+                ]
+                .sort((a, b) => a - b)
+                .join("-")}`;
+            }
+
+            // Begin listening for the SocketMessage event
+            Echo.private(channel)
+            .error((error) => {
+                console.log("SOCKET_EVENT_ERROR: ", error);
+            })
+            .listen("SocketMessage", (e) => {
+                console.log("DETECTED_SOCKET_EVENT: ", e);
+
+                const message = e.message;
+
+                // Broadcast the freshly created message
+                emit("message.created", message);
+                if (message.sender_id === user.id) {
+                    return;
+                }
+
+                // Broadcast a notification too with the message content
+                emit("newMessageNotification", {
+                    user: message.sender,
+                    group_id: message.group_id,
+                    message: message.message || `Shared ${
+                        message.attachments.length === 1
+                        ? "an attachment"
+                        : message.attachments.length + " attachments"
+                    }`
+                });
+            });
+        });
+
+        // Stop listening for any event in the broadcast channels
+        return () => {
+            conversations.forEach((conversation) => {
+                let channel = `message.group.${conversation.id}`;
+
+                if (conversation.is_user) {
+                    channel = `message.user.${[
+                        parseInt(user.id),
+                        parseInt(conversation.id),
+                    ]
+                    .sort((a, b) => a - b)
+                    .join("-")}`;
+                }
+                Echo.leave(channel);
+            });
+        };
+    }, [conversations]);
 
     return (
         <div className="h-screen min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900">
