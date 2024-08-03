@@ -187,7 +187,7 @@ const ChatLayout = ({children}) => {
                     </div>
 
                     {/* Display the list of chats (personal and group) here */}
-                    <div className = "flex-1 overflow-auto lol">
+                    <div className = "flex-1 overflow-auto">
                         {sortedConversations.map((conversation) => (
                             <ConversationItem
                                 key={`${
