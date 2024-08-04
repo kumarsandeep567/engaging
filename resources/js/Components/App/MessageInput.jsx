@@ -144,12 +144,17 @@ const MessageInput = ({ conversation = null }) => {
                     <button 
                         className="btn bg-sky-400 rounded-xl text-gray-800 hover:bg-sky-300"
                         onClick={sendMessage}
+                        disabled={messageSending}
                     >
-                        { messageSending && (
-                            <span className="loading loading-spinner loding-xs"></span>
-                        )}
-                        <PaperAirplaneIcon className="w-6" />
-                        <span className="hidden sm:inline">Send</span>
+                        {messageSending 
+                            ? <span className="loading loading-spinner loding-xs"></span>
+                            : (
+                                <>
+                                    <PaperAirplaneIcon className="w-6" />
+                                    <span className="hidden sm:inline">Send</span>
+                                </>
+                            )
+                        }
                     </button>
                 </div>
 
