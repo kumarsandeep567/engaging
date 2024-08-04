@@ -78,7 +78,7 @@ export default function UserOptionsDropdown({ conversation }) {
                                         className = {`
                                             ${
                                                 active
-                                                ? "bg-red-300 text-red dark:bg-red-700 "
+                                                ? "bg-red-200 text-red dark:bg-red-700 "
                                                 : "text-red-800 "
                                             }
                                             group font-medium flex w-full items-center rounded-md px-2 py-2 text-sm
@@ -112,7 +112,7 @@ export default function UserOptionsDropdown({ conversation }) {
                                         className = {`
                                             ${
                                                 active
-                                                ? "bg-green-300 text-green dark:bg-green-700 "
+                                                ? "bg-green-200 text-green dark:bg-green-700 "
                                                 : "text-green-800 "
                                             }
                                             group font-medium flex w-full items-center rounded-md px-2 py-2 text-sm
