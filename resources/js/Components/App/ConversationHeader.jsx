@@ -39,9 +39,9 @@ const ConversationHeader = ({selectedConversation}) => {
                             show the number of participants.
                          */}
                         <div>
-                            <h3>{selectedConversation.name}</h3>
+                            <h3 className="dark:text-gray-100">{selectedConversation.name}</h3>
                             { selectedConversation.is_group && (
-                                <p className="text-xs text-grey-500">
+                                <p className="text-xs text-grey-500 dark:text-gray-100">
                                     {selectedConversation.users.length} members
                                 </p>
                             )}
