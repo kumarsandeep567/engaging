@@ -28,7 +28,11 @@ const formatMessageDate = (date, longString=false) => {
             month: "short"
         });
     } else {
-        return givenDate.toLocaleDateString();
+        return givenDate.toLocaleDateString([], {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+        });
     }
 };
 
