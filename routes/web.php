@@ -26,7 +26,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/message/{message}', [MessageController::class, 'destroy'])->name('message.destroy');
 
     // Route to load older messages (personal and group)
-    Route::get('/message/older/{message}', [MessageController::class, 'loadOlder'])->name('message.loadOlder');
+    Route::get('/message/older/{message}', [MessageController::class, 'loadOlderMessages'])->name('message.loadOlder');
 
 });
 
