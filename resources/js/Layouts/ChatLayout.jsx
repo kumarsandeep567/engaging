@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import TextInput from "@/Components/TextInput";
 import ConversationItem from "@/Components/App/ConversationItem";
+import { useEventBus } from "@/EventBus";
 
 const ChatLayout = ({children}) => {
 
@@ -16,6 +17,9 @@ const ChatLayout = ({children}) => {
      */
 
     const page = usePage();
+
+    // Load the Event Bus
+    const { on } = useEventBus();
 
     // Keep track of online users (as an onject instead of array)
     const [onlineUsers, setOnlineUsers] = useState({});
@@ -34,6 +38,46 @@ const ChatLayout = ({children}) => {
     const [localConversations, setLocalConversations] = useState([]);
 
     const [sortedConversations, setSortedConversations] = useState([]);
+
+    // Update the conversation sidebar when a new message is received
+    const messageCreated = (message) => {
+        setLocalConversations((oldConversations) => {
+            return oldConversations.map((user) => {
+
+                // If the message belongs to a personal chat, then update the
+                // personal chat
+                if (
+                    message.receiver_id &&
+                    !user.is_group && 
+                    (user.id == message.sender_id || user.id == message.receiver_id)
+                ) {
+                    user.last_message = message.message;
+                    user.last_message_date = message.created_at;
+                }
+
+                // If the message belongs to a group chat, then update it
+                if (
+                    message.group_id &&
+                    user.is_group && 
+                    user.id == message.group_id
+                ) {
+                    user.last_message = message.message;
+                    user.last_message_date = message.created_at;
+                }
+
+                return user;
+            });
+        });
+    };
+
+    // Listen on the Event Bus for new message events
+    useEffect(() => {
+        const offCreated = on("message.created", messageCreated);
+
+        return () => {
+            offCreated();
+        };
+    }, [on]);
 
     // Update sortedConversations when local conversations change
     useEffect(() => {
