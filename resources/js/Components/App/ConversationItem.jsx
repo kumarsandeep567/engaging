@@ -52,6 +52,11 @@ const ConversationItem = ({
 
     // Since only 34 characters fit nicely on the 
     const truncateText = (text, maxLength = 34) => {
+
+        if (!text) {
+            return;
+        }
+
         if (text.length <= maxLength) {
             return text;
         }
@@ -61,7 +66,7 @@ const ConversationItem = ({
         const lastSpaceIndex = truncated.lastIndexOf(' ');
     
         if (lastSpaceIndex > 0) {
-            truncated = truncated.slice(0, lastSpaceIndex).concat('...');
+            truncated = truncated.slice(0, lastSpaceIndex).concat(' ...');
         }
 
         return truncated;
