@@ -50,8 +50,8 @@ class MessageController extends Controller
         ->latest()
         ->paginate(10);
 
-        // Forward these messages to the HomePage to 
-        // render them on ChatLayout, and to MessageResource
+        // Forward these messages to the Home to render them on ChatLayout
+        // Let MessageResource handle what fields to return for the messages
         return inertia('Home', [
             'selectedConversation'  => $group->toConversationArray(),
             'messages'              => MessageResource::collection($messages)
