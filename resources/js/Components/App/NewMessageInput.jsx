@@ -45,7 +45,7 @@ const NewMessageInput = ({ value, onChange, onSend }) => {
             placeholder="Type a message ..."
             onKeyDown={onInputKeyDown}
             onChange={(ev) => onChangeEvent(ev)}
-            className="input input-bordered w-3/4 rounded-xl resize-none overflow-y-auto max-h-40 mx-2"
+            className="w-3/4 rounded-xl resize-none border-gray-300 focus:border-sky-500 dark:focus:border-sky-600 focus:ring-sky-500 overflow-y-auto max-h-40 mx-2 shadow-sm"
         >
         </textarea>
     );
