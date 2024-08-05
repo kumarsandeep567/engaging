@@ -50,6 +50,23 @@ const ConversationItem = ({
         }
     }
 
+    // Since only 34 characters fit nicely on the 
+    const truncateText = (text, maxLength = 34) => {
+        if (text.length <= maxLength) {
+            return text;
+        }
+        
+        // Length of the text exceeds the specified length, truncate it.
+        let truncated = text.slice(0, maxLength);
+        const lastSpaceIndex = truncated.lastIndexOf(' ');
+    
+        if (lastSpaceIndex > 0) {
+            truncated = truncated.slice(0, lastSpaceIndex).concat('...');
+        }
+
+        return truncated;
+    };
+
     return (
 
         /**
@@ -116,7 +133,7 @@ const ConversationItem = ({
                 { conversation.last_message_date && (
                     <p className="text-xs text-nowrap overflow-hidden text-ellipsis">
                         <ReactMarkdown>
-                            {conversation.last_message}
+                            {truncateText(conversation.last_message)}
                         </ReactMarkdown>
                     </p>
                 )
