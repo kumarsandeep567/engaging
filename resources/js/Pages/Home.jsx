@@ -198,10 +198,10 @@ function Home({ selectedConversation = null, messages = null }) {
                 <div className="flex flex-col gap-8 justify-center items-center text-center h-full opacity-35 select-none">
                     <div className="flex flex-col items-center text-2xl md:text-4xl">
                         <ApplicationLogo className="block h-12 mb-4 fill-current text-gray-800 dark:text-gray-200" />
-                        <span>Welcome to {appName} messenger!</span>
+                        <span className="dark:text-gray-200">Welcome to {appName} messenger!</span>
                     </div>
                     <div className="text-xl md:text-2xl">
-                        <div>Start a new chat or select a chat to see the messages</div>
+                        <div className="dark:text-gray-200">Start a new chat or select a chat to see the messages</div>
                     </div>
                 </div>
             )}
@@ -224,7 +224,7 @@ function Home({ selectedConversation = null, messages = null }) {
                         {/* If no messages exist in the conversation */}
                         {localMessages.length === 0 && (
                             <div className="flex justify-center items-center h-full">
-                                <div className="text-xl text-gray-500">
+                                <div className="text-xl text-gray-500 dark:text-gray-300">
                                     This seems like a new chat. Say something nice ...
                                 </div>
                             </div>
