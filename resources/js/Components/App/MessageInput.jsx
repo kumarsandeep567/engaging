@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/solid";
 import NewMessageInput from "@/Components/App/NewMessageInput";
 import axios from "axios";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 
 /**
  * This component will provide a bottom panel for the text field, attachment, 
@@ -160,9 +161,16 @@ const MessageInput = ({ conversation = null }) => {
 
                 {/* Show the error message if there's an error in the input */}
                 { inputErrorMessage && (
-                    <p className="text-xs text-red-200">
-                        {inputErrorMessage}
-                    </p>
+                    <div className="flex">
+                        <div className="flex-none pr-2 py-1">
+                            <ExclamationCircleIcon className="w-6 text-red-500" />
+                        </div>
+                        <div className="flex-none py-1.5">
+                            <p className="text-sm text-red-500">
+                                {inputErrorMessage}
+                            </p>
+                        </div>
+                    </div>
                 )}
             </div>
         </div>
