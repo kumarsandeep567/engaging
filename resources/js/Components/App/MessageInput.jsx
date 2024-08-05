@@ -73,7 +73,7 @@ const MessageInput = ({ conversation = null }) => {
 
 
     return (
-        <div className="flex flex-wrap items-start border-t border-gray-200 py-3">
+        <div className="flex flex-wrap items-start border-t shadow-2xl border-gray-200 py-3">
             <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2">
 
                 {/* The file attachment (file upload) button */}
