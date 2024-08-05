@@ -8,15 +8,19 @@ What works:
 4) Blocking a user
 5) Markdown support for messages
 6) Infinite scrolling to load older messages
+7) Update conversation list when new messages are received
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
-1) Update conversation list when new messages are received
-2) Message notifications
-3) Support file upload for attachments
-4) Support profile photos for users and groups
+1) Style markdowns appropriately in the chats
+2) Add emoji support
+3) Message notifications
+4) Support file upload for attachments
+5) Support profile photos for users and groups
+6) Allow users to delete their messages
+7) Implement group chat operations (Add new members, etc)
 
 ***Work in progress...***
 ***Add the repo to your watchlist to track progress***
