@@ -23,6 +23,13 @@ const MessageInput = ({ conversation = null }) => {
 
     // Handler to send the message.
     const sendMessage = () => {
+
+        // Prevent a new message from being sent if there's already a message 
+        // being sent
+        if (messageSending) {
+            return;
+        }
+
         if (newMessage.trim() === "") {
             setInputErrorMessage("Cannot send an empty message. Please type something or select a file.");
 
@@ -74,7 +81,7 @@ const MessageInput = ({ conversation = null }) => {
 
     return (
         <div className="flex flex-wrap items-start border-t shadow-2xl border-gray-200 py-3">
-            <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2">
+            {/* <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2"> */}
 
                 {/* The file attachment (file upload) button */}
                 {/* <button className="p-1 text-gray-400 hover:text-gray-300 relative">
@@ -96,7 +103,7 @@ const MessageInput = ({ conversation = null }) => {
                         className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
                     />
                 </button> */}
-            </div>
+            {/* </div> */}
 
             {/* The bottom input panel */}
             <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
