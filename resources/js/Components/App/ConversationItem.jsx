@@ -3,6 +3,7 @@ import UserAvatar from "@/Components/App/UserAvatar";
 import GroupAvatar from "@/Components/App/GroupAvatar";
 import UserOptionsDropdown from "@/Components/App/UserOptionsDropdown";
 import formatMessageDate from "@/helpers";
+import ReactMarkdown from "react-markdown";
 
 /**
  * A custom component for rendering the list of 
@@ -114,7 +115,9 @@ const ConversationItem = ({
                 {/* Show the last message if the last message date exists */}
                 { conversation.last_message_date && (
                     <p className="text-xs text-nowrap overflow-hidden text-ellipsis">
-                        {conversation.last_message}
+                        <ReactMarkdown>
+                            {conversation.last_message}
+                        </ReactMarkdown>
                     </p>
                 )
                 }
