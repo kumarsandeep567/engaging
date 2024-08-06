@@ -77,6 +77,8 @@
     overflow: hidden;
     padding-left: 1.5rem;
     padding-right: 1.5rem;
+    background-color: rgba(240, 240, 240, 0.8);
+    border-radius: 5px;
 }
 
 .chat-message-content code {
