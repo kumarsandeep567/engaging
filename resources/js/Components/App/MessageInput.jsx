@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useState, Fragment, useCallback, useEffect } from "react";
 import { 
     PaperClipIcon,
     PhotoIcon,
     FaceSmileIcon,
-    HandThumbUpIcon,
     PaperAirplaneIcon
 } from "@heroicons/react/24/solid";
 import NewMessageInput from "@/Components/App/NewMessageInput";
 import axios from "axios";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import EmojiPicker from "emoji-picker-react";
+import { Popover, Transition } from "@headlessui/react";
 
 /**
  * This component will provide a bottom panel for the text field, attachment, 
@@ -20,6 +21,11 @@ const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+
+    // Emoji Picker Configuration 
+    const emojiPickerConfig = {
+        showPreview: false
+    };
 
     // Handler to send the message.
     const sendMessage = () => {
@@ -130,13 +136,33 @@ const MessageInput = ({ conversation = null }) => {
                         />
                     </button>
 
-                    {/* Show the emoji icon and the Like icon */}
-                    <button className="p-1 text-gray-400 hover:text-gray-500 cursor-pointer">
-                        <FaceSmileIcon className="w-6 h-6" />
-                    </button>
-                    {/* <button className="p-1 text-gray-400 hover:text-gray-500 cursor-pointer">
-                        <HandThumbUpIcon className="w-6 h-6" />
-                    </button> */}
+                    {/* Show the emoji icon */}
+                    <Popover className="relative">
+                        <Popover.Button 
+                            className="p-1 pt-3 text-gray-400 hover:text-gray-500 cursor-pointer"
+                        >
+                            <FaceSmileIcon className="w-6 h-6" />
+                        </Popover.Button>
+                        <Transition
+                            as={Fragment}
+                            enter="transition ease-in duration-1"
+                            enterFrom="opacity-0 translate-y-1"
+                            enterTo="opacity-100 translate-y-0"
+                            leave="transition ease-in duration-1"
+                            leaveFrom="opacity-100 translate-y-0"
+                            leaveTo="opacity-0 translate-y-1"
+                        >
+                        <Popover.Panel className="absolute z-10 bottom-full">
+                            <EmojiPicker 
+                                emojiStyle="native"
+                                previewConfig={emojiPickerConfig}
+                                skinTonesDisabled={true}
+                                lazyLoadEmojis={true}
+                                onEmojiClick={(ev) => setNewMessage(newMessage + ev.emoji)}
+                            />
+                        </Popover.Panel>
+                        </Transition>
+                    </Popover>
 
                     {/* The text area for typing the message */}
                     <NewMessageInput 
