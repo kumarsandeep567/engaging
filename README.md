@@ -15,12 +15,11 @@ What's broken?
 1) Persistent Dark theme
 
 TODO:
-1) Style markdowns appropriately in the chats
-2) Message notifications
-3) Support file upload for attachments
-4) Support profile photos for users and groups
-5) Allow users to delete their messages
-6) Implement group chat operations (Add new members, etc)
+1) Message notifications
+2) Support file upload for attachments
+3) Support profile photos for users and groups
+4) Allow users to delete their messages
+5) Implement group chat operations (Add new members, etc)
 
 Deployment (AWS):
 *Coming soon ...*
