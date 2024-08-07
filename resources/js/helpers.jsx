@@ -1,4 +1,11 @@
 /**
+ * =============================================================================
+ * Helpers a.k.a utility functions that will be used across the application, 
+ * when needed.
+ * =============================================================================
+ */
+
+/**
  * A helper function to format the message date as a long string.
  */
 
@@ -61,6 +68,86 @@ export const isYesterday = (date, yesterday) => {
         date.getMonth()     === yesterday.getMonth()    &&
         date.getFullYear()  === yesterday.getFullYear()
     );
+};
+
+
+/**
+ * A helper function to check if given file is an image.
+ */
+
+export const isImage = (attachment) => {
+    let mime = attachment.mime || attachment.type;
+    mime = mime.split("/");
+    return mime[0].toLowerCase() === "image";
+};
+
+
+/**
+ * A helper function to check if given file is a video.
+ */
+
+export const isVideo = (attachment) => {
+    let mime = attachment.mime || attachment.type;
+    mime = mime.split("/");
+    return mime[0].toLowerCase() === "video";
+};
+
+
+/**
+ * A helper function to check if given file is an audio.
+ */
+
+export const isAudio = (attachment) => {
+    let mime = attachment.mime || attachment.type;
+    mime = mime.split("/");
+    return mime[0].toLowerCase() === "audio";
+};
+
+
+/**
+ * A helper function to check if given file is a PDF.
+ */
+
+export const isPDF = (attachment) => {
+    let mime = attachment.mime || attachment.type;
+    mime = mime.split("/");
+    return mime === "application/pdf";
+};
+
+
+/**
+ * A helper function to check if the given file can be previewed.
+ */
+
+export const isPreviewable = (attachment) => {
+    return (
+        isImage(attachment) ||
+        isVideo(attachment) ||
+        isAudio(attachment) ||
+        isPDF(attachment)
+    );
+};
+
+
+/**
+ * A helper function to format the file size.
+ */
+
+export const fileSizeInBytes = (bytes, decimals = 2) => {
+    if (bytes === 0) return "0 Bytes";
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB"];
+
+    let _index = 0;
+    let _size = bytes;
+    while (_size >= k) {
+        _size /= k;
+        _index++;
+    }
+
+    return parseFloat(_size.toFixed(dm)) + " " + sizes[_index];
 };
 
 export default formatMessageDate;

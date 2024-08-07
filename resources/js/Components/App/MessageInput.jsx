@@ -3,7 +3,9 @@ import {
     PaperClipIcon,
     PhotoIcon,
     FaceSmileIcon,
-    PaperAirplaneIcon
+    PaperAirplaneIcon,
+    XCircleIcon,
+    XMarkIcon
 } from "@heroicons/react/24/solid";
 import NewMessageInput from "@/Components/App/NewMessageInput";
 import axios from "axios";
@@ -21,10 +23,31 @@ const MessageInput = ({ conversation = null }) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+    const [chosenFiles, setChosenFiles] = useState([]);
+    const [uploadProgress, setUploadProgress] = useState(0);
 
     // Emoji Picker Configuration 
     const emojiPickerConfig = {
         showPreview: false
+    };
+
+    // Event handler for when the files change
+    const onFileChange = (ev) => {
+        const files = ev.target.files;
+
+        // Convert the files into an array and map them to an object which
+        // contains the files and their URLs (for previewing them)
+        const updatedFiles = [...files].map((file) => {
+            return {
+                file: file,
+                url: URL.createObjectURL(file)
+            };
+        });
+
+        // Updated the chosen files
+        setChosenFiles((prevFiles) => {
+            return [...prevFiles, ...updatedFiles];
+        });
     };
 
     // Handler to send the message.
@@ -37,10 +60,11 @@ const MessageInput = ({ conversation = null }) => {
         }
 
         if (newMessage.trim() === "") {
-            setInputErrorMessage("Cannot send an empty message. Please type something or select a file.");
+            setInputErrorMessage("Cannot send an empty message. Please type a message or select an image or a file.");
 
             // Hide the error message after 5 seconds.
             setTimeout(() => {
+                errorModal.close();
                 setInputErrorMessage("");
             }, 5000);
 
@@ -50,6 +74,10 @@ const MessageInput = ({ conversation = null }) => {
         // Use a form data to send the message along with attachments (if any).
         const messageData = new FormData();
         messageData.append("message", newMessage)
+
+        chosenFiles.forEach((file) => {
+            messageData.append("attachments[]", file.file);
+        });
 
         if (conversation.is_user) {
             messageData.append("receiver_id", conversation.id);
@@ -72,14 +100,20 @@ const MessageInput = ({ conversation = null }) => {
 
                 // For now, just log the progress
                 console.log("Upload progress: ", progress);
+                setUploadProgress(progress);
             }
         }).then((response) => {
             setNewMessage("");
+            setUploadProgress(0);
+            setChosenFiles([]);
             setMessageSending(false);
             console.log("UPLOAD RESPONSE: ", response);
         }).catch((error) => {
+            setChosenFiles([]);
             setMessageSending(false);
-            console.log("UPLOAD ERROR: ", error);
+            const errorMessage = error?.response?.data?.message;
+            setInputErrorMessage(errorMessage || "Something went wrong while trying to send the message..!");
+            console.log("UPLOAD ERROR: ", errorMessage);
         });
 
     };
@@ -121,6 +155,7 @@ const MessageInput = ({ conversation = null }) => {
                         <input 
                             type="file" 
                             multiple
+                            onChange={onFileChange}
                             className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
                         />
                     </button>
@@ -131,6 +166,7 @@ const MessageInput = ({ conversation = null }) => {
                         <input 
                             type="file" 
                             multiple
+                            onChange={onFileChange}
                             accept="image/*"
                             className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
                         />
@@ -145,22 +181,19 @@ const MessageInput = ({ conversation = null }) => {
                         </Popover.Button>
                         <Transition
                             as={Fragment}
-                            enter="transition ease-in duration-1"
-                            enterFrom="opacity-0 translate-y-1"
-                            enterTo="opacity-100 translate-y-0"
                             leave="transition ease-in duration-1"
                             leaveFrom="opacity-100 translate-y-0"
                             leaveTo="opacity-0 translate-y-1"
                         >
-                        <Popover.Panel className="absolute z-10 bottom-full">
-                            <EmojiPicker 
-                                emojiStyle="native"
-                                previewConfig={emojiPickerConfig}
-                                skinTonesDisabled={true}
-                                lazyLoadEmojis={true}
-                                onEmojiClick={(ev) => setNewMessage(newMessage + ev.emoji)}
-                            />
-                        </Popover.Panel>
+                            <Popover.Panel className="absolute z-10 bottom-full shadow-md rounded-lg mb-2">
+                                <EmojiPicker 
+                                    emojiStyle="native"
+                                    previewConfig={emojiPickerConfig}
+                                    skinTonesDisabled={true}
+                                    lazyLoadEmojis={true}
+                                    onEmojiClick={(ev) => setNewMessage(newMessage + ev.emoji)}
+                                />
+                            </Popover.Panel>
                         </Transition>
                     </Popover>
 
@@ -193,18 +226,94 @@ const MessageInput = ({ conversation = null }) => {
                 </div>
 
                 {/* Show the error message if there's an error in the input */}
-                { inputErrorMessage && (
-                    <div className="flex">
-                        <div className="flex-none pr-2 py-1">
-                            <ExclamationCircleIcon className="w-6 text-red-500" />
-                        </div>
-                        <div className="flex-none py-1.5">
-                            <p className="text-sm text-red-500">
-                                {inputErrorMessage}
-                            </p>
+                <dialog id="errorModal" className="modal">
+                    <div className="modal-box">
+                        <form method="dialog">
+                            <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                <XMarkIcon className="w-5" />
+                            </button>
+                        </form>
+                        <h3 className="text-lg font-bold">
+                            <ExclamationCircleIcon className="w-8 text-red-500" />
+                        </h3>
+                        <p className="py-4 text-md text-red-500">
+                            {inputErrorMessage}
+                        </p>
+                    </div>
+                </dialog>
+
+                {/* Show the image/file upload progress in a toast notification */}
+                {!!uploadProgress && (
+                    <div className="toast toast-top toast-center mt-14">
+                        <div className="alert bg-sky-200 px-6 shadow-sm">
+                            <div>
+                                <span>Uploading</span>
+                            </div>
+                            <div 
+                                className="radial-progress" 
+                                style={{ 
+                                    "--value": `${uploadProgress || 0}`, 
+                                    "--size": "3rem", 
+                                    "--thickness": "5px" 
+                                }} 
+                                role="progressbar"
+                            >
+                                <span className="text-xs">{uploadProgress}%</span>
+                            </div>
                         </div>
                     </div>
                 )}
+
+                {/* Show the modal if there's an error */}
+                {inputErrorMessage && (errorModal.showModal())}
+
+                {/* The uploaded files can be previewed in this section */}
+                <div className="flex flex-wrap gap-1 mt-2">
+                    {chosenFiles.map((file) => {
+                        <div
+                            className={
+                                `relative flex justify-between cursor-pointer ` + (
+                                    !isImage(file.file)
+                                    ? " w-[240px]"
+                                    : ""
+                            )}
+                            key={file.file.name}
+                        >
+
+                            {/* For image files */}
+                            {isImage(file.file) && (
+                                <img 
+                                    src={file.url} 
+                                    alt="user-uploaded-image"
+                                    className="w-16 h-16 object-cover" 
+                                />
+                            )}
+
+                            {/* For audio files */}
+                            {isAudio(file.file) && (
+                                <CustomAudioPlayer 
+                                    file={file}
+                                    showVolume={false}
+                                />
+                            )}
+
+                            {/* For all other files */}
+                            {!isImage(file.file) && isAudio(file.file) && (
+                                <AttachmentPreview file={file} />
+                            )}
+
+                            {/* Provide a section to remove file(s) marked for uploading */}
+                            <button
+                                onClick={() => setChosenFiles(
+                                    chosenFiles.filter((f) => f.file.name !== file.file.name)
+                                )}
+                                className="absolute w-6 h-6 rounded-full bg-gray-800 right-2 top-2 text-gray-300 hover:text-gray-100 z-10"
+                            >
+                                <XCircleIcon className="w-6" />
+                            </button>
+                        </div>
+                    })}
+                </div>
             </div>
         </div>
     );
