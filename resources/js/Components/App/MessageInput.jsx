@@ -6,12 +6,15 @@ import {
     PaperAirplaneIcon,
     XCircleIcon,
     XMarkIcon
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/outline";
 import NewMessageInput from "@/Components/App/NewMessageInput";
 import axios from "axios";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import EmojiPicker from "emoji-picker-react";
 import { Popover, Transition } from "@headlessui/react";
+import CustomAudioPlayer from "@/Components/App/CustomAudioPlayer";
+import AttachmentPreview from "@/Components/App/AttachmentPreview";
+import { isAudio, isImage } from "@/helpers";
 
 /**
  * This component will provide a bottom panel for the text field, attachment, 
@@ -59,7 +62,7 @@ const MessageInput = ({ conversation = null }) => {
             return;
         }
 
-        if (newMessage.trim() === "") {
+        if (newMessage.trim() === "" && chosenFiles.length === 0) {
             setInputErrorMessage("Cannot send an empty message. Please type a message or select an image or a file.");
 
             // Hide the error message after 5 seconds.
@@ -111,6 +114,7 @@ const MessageInput = ({ conversation = null }) => {
         }).catch((error) => {
             setChosenFiles([]);
             setMessageSending(false);
+            setUploadProgress(0);
             const errorMessage = error?.response?.data?.message;
             setInputErrorMessage(errorMessage || "Something went wrong while trying to send the message..!");
             console.log("UPLOAD ERROR: ", errorMessage);
@@ -150,7 +154,10 @@ const MessageInput = ({ conversation = null }) => {
                 <div className="flex">
 
                     {/* The file attachment (file upload) button */}
-                    <button className="p-1 text-gray-400 hover:text-gray-500 relative">
+                    <button 
+                        className="tooltip tooltip-right p-1 text-gray-400 hover:text-gray-500 relative"
+                        data-tip = "Upload files"
+                    >
                         <PaperClipIcon className="w-6 h-6" />
                         <input 
                             type="file" 
@@ -161,7 +168,10 @@ const MessageInput = ({ conversation = null }) => {
                     </button>
 
                     {/* The image attachment button */}
-                    <button className="p-1 text-gray-400 hover:text-gray-500 relative">
+                    <button 
+                        className="tooltip tooltip-top p-1 text-gray-400 hover:text-gray-500 relative"
+                        data-tip = "Upload images"
+                    >
                         <PhotoIcon className="w-6 h-6" />
                         <input 
                             type="file" 
@@ -175,7 +185,8 @@ const MessageInput = ({ conversation = null }) => {
                     {/* Show the emoji icon */}
                     <Popover className="relative">
                         <Popover.Button 
-                            className="p-1 pt-3 text-gray-400 hover:text-gray-500 cursor-pointer"
+                            className="tooltip tooltip-top p-1 pt-3 text-gray-400 hover:text-gray-500 cursor-pointer"
+                            data-tip = "Send emoji"
                         >
                             <FaceSmileIcon className="w-6 h-6" />
                         </Popover.Button>
@@ -268,16 +279,16 @@ const MessageInput = ({ conversation = null }) => {
                 {inputErrorMessage && (errorModal.showModal())}
 
                 {/* The uploaded files can be previewed in this section */}
-                <div className="flex flex-wrap gap-1 mt-2">
-                    {chosenFiles.map((file) => {
+                <div className="flex flex-wrap gap-1 mt-2 ">
+                    {chosenFiles.map((file) => (
                         <div
+                            key={file.file.name}
                             className={
                                 `relative flex justify-between cursor-pointer ` + (
                                     !isImage(file.file)
                                     ? " w-[240px]"
                                     : ""
                             )}
-                            key={file.file.name}
                         >
 
                             {/* For image files */}
@@ -291,14 +302,14 @@ const MessageInput = ({ conversation = null }) => {
 
                             {/* For audio files */}
                             {isAudio(file.file) && (
-                                <CustomAudioPlayer 
+                                <CustomAudioPlayer
                                     file={file}
                                     showVolume={false}
                                 />
                             )}
 
                             {/* For all other files */}
-                            {!isImage(file.file) && isAudio(file.file) && (
+                            {!isImage(file.file) && !isAudio(file.file) && (
                                 <AttachmentPreview file={file} />
                             )}
 
@@ -307,12 +318,12 @@ const MessageInput = ({ conversation = null }) => {
                                 onClick={() => setChosenFiles(
                                     chosenFiles.filter((f) => f.file.name !== file.file.name)
                                 )}
-                                className="absolute w-6 h-6 rounded-full bg-gray-800 right-2 top-2 text-gray-300 hover:text-gray-100 z-10"
+                                className="absolute w-6 h-6 rounded-full bg-gray-700 -right-2 -top-2 text-gray-300 hover:text-gray-100 z-10"
                             >
                                 <XCircleIcon className="w-6" />
                             </button>
                         </div>
-                    })}
+                    ))}
                 </div>
             </div>
         </div>
