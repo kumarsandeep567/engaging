@@ -3,13 +3,14 @@ import ReactMarkdown from "react-markdown";
 import React from "react";
 import UserAvatar from "./UserAvatar";
 import formatMessageDate from "@/helpers";
+import MessageAttachments from "@/Components/App/MessageAttachments";
 
 /**
  * This component will provide the input field for the user to type a text 
  * message with markdown features.
  */
 
-const MessageItem = ({ message }) => {
+const MessageItem = ({ message, attachmentClick }) => {
     const currentUser = usePage().props.auth.user;
 
     return (
@@ -55,9 +56,17 @@ const MessageItem = ({ message }) => {
 
                 {/* Render the message using React Markdown */}
                 <div className="chat-message">
+
+                    {/* Text message */}
                     <div className="chat-message-content text-slate-900">
                         <ReactMarkdown>{message.message}</ReactMarkdown>
                     </div>
+
+                    {/* Image/file attachments, if any */}
+                    <MessageAttachments
+                        attachments     = {message.attachments}
+                        attachmentClick = {attachmentClick}
+                    />
                 </div>
             </div>
         </div>
