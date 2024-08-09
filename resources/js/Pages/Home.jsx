@@ -8,6 +8,7 @@ import MessageItem from "@/Components/App/MessageItem";
 import MessageInput from "@/Components/App/MessageInput";
 import { useEventBus } from "@/EventBus";
 import axios from "axios";
+import AttachmentPreviewModal from "@/Components/App/AttachmentPreviewModal";
 
 /**
  * Create Home Layout as a persistent Layout to show the conversation sidebar
@@ -32,6 +33,10 @@ function Home({ selectedConversation = null, messages = null }) {
     const noMoreMessagesRef = useRef(noMoreMessages);
 
     const [scrollFromBottom, setScrollFromBottom] = useState(0);
+
+    // Image/file attachments preview
+    const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
+    const [previewAttachment, setPreviewAttachment] = useState({});
 
     const messageCreated = (message) => {
 
@@ -66,6 +71,15 @@ function Home({ selectedConversation = null, messages = null }) {
     useEffect(() => {
         noMoreMessagesRef.current = noMoreMessages;
     }, [noMoreMessages]);
+
+    // Handler for when the user clicks on the attachment
+    const attachmentClick = (attachments, ind) => {
+        setPreviewAttachment({
+            attachments,
+            ind
+        });
+        setShowAttachmentPreview(true);
+    };
 
     // Load older messages
     // Cache the function and recall every time localMessages gets updated
@@ -239,8 +253,9 @@ function Home({ selectedConversation = null, messages = null }) {
 
                                 { localMessages.map((message) => (
                                     <MessageItem
-                                        key     = {message.id}
-                                        message = {message}
+                                        key             = {message.id}
+                                        message         = {message}
+                                        attachmentClick = {attachmentClick}
                                     />
                                 ))}
                             </div>
@@ -248,6 +263,16 @@ function Home({ selectedConversation = null, messages = null }) {
                     </div>
                     <MessageInput conversation = {selectedConversation} />
                 </>
+            )}
+
+            {/* Show the attachments in a modal */}
+            {previewAttachment.attachments && (
+                <AttachmentPreviewModal
+                    attachments={previewAttachment.attachments}
+                    index={previewAttachment.ind}
+                    show={showAttachmentPreview}
+                    onClose={() => setShowAttachmentPreview(false)}
+                />
             )}
         </>
     );
