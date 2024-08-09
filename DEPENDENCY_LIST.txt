@@ -71,6 +71,9 @@ php artisan make:resource MessageAttachmentResource
 # is deleted
 php artisan make:observer MessageObserver
 
+# Create links for the items saved in storage directory
+php artisan storage:link
+
 
 Site wide dark theme
 https://daisyui.com/components/theme-controller/
