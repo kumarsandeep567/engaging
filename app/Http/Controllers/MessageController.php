@@ -126,7 +126,7 @@ class MessageController extends Controller
                 ];
 
                 $attachment = MessageAttachment::create($model);
-                $attachments = $attachment;
+                $attachments[] = $attachment;
             }
             $message->attachments = $attachments;
         }
