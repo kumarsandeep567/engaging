@@ -10,19 +10,19 @@ What works:
 6) Infinite scrolling to load older messages
 7) Update conversation list when new messages are received
 8) Added emoji support
+9) Image/file upload (as attachments)
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
 1) Message notifications
-2) Support file upload for attachments
-3) Support profile photos for users and groups
-4) Allow users to delete their messages
-5) Implement group chat operations (Add new members, etc)
+2) Support profile photos for users and groups
+3) Allow users to delete their messages
+4) Implement group chat operations (Add new members, etc)
 
-Deployment (AWS):
+Deployment (AWS): \
 *Coming soon ...*
 
-***Work in progress...***
+***Work in progress...*** \
 ***Add this repository to your watchlist to track progress***
