@@ -47,10 +47,14 @@ const MessageInput = ({ conversation = null }) => {
             };
         });
 
+        // Reset the file list (to allow choosing the same files again)
+        ev.target.value = null;
+
         // Updated the chosen files
         setChosenFiles((prevFiles) => {
             return [...prevFiles, ...updatedFiles];
         });
+
     };
 
     // Handler to send the message.
@@ -124,38 +128,18 @@ const MessageInput = ({ conversation = null }) => {
 
 
     return (
-        <div className="flex flex-wrap items-start border-t shadow-2xl border-gray-200 py-3">
-            {/* <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2"> */}
+        
+        // Bottom input
+        // For shorter bottom input bar, use sm:px-10 md:mx-28 my-2
+        <div className="flex flex-wrap border shadow-xl border-gray-300 pt-3 pb-1  rounded-xl">
 
-                {/* The file attachment (file upload) button */}
-                {/* <button className="p-1 text-gray-400 hover:text-gray-300 relative">
-                    <PaperClipIcon className="w-6" />
-                    <input 
-                        type="file" 
-                        multiple
-                        className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
-                    />
-                </button> */}
-
-                {/* The image attachment button */}
-                {/* <button className="p-1 text-gray-400 hover:text-gray-300 relative">
-                    <PhotoIcon className="w-6" />
-                    <input 
-                        type="file" 
-                        multiple
-                        accept="image/*"
-                        className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
-                    />
-                </button> */}
-            {/* </div> */}
-
-            {/* The bottom input panel */}
-            <div className="order-1 px-3 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
-                <div className="flex">
+            {/* Contents of the bottom panel */}
+            <div className="order-1 xs:p-0 min-w-[220px] basis-full xs:basis-0 xs:order-2 flex-1 relative">
+                <div className="flex justify-center">
 
                     {/* The file attachment (file upload) button */}
                     <button 
-                        className="tooltip tooltip-right p-1 text-gray-400 hover:text-gray-500 relative"
+                        className="tooltip tooltip-top xs:tooltip-right p-1 text-gray-400 hover:text-blue-600 relative"
                         data-tip = "Upload files"
                     >
                         <PaperClipIcon className="w-6 h-6" />
@@ -169,7 +153,7 @@ const MessageInput = ({ conversation = null }) => {
 
                     {/* The image attachment button */}
                     <button 
-                        className="tooltip tooltip-top p-1 text-gray-400 hover:text-gray-500 relative"
+                        className="tooltip tooltip-top p-1 text-gray-400 hover:text-emerald-600 relative"
                         data-tip = "Upload images"
                     >
                         <PhotoIcon className="w-6 h-6" />
@@ -185,7 +169,7 @@ const MessageInput = ({ conversation = null }) => {
                     {/* Show the emoji icon */}
                     <Popover className="relative">
                         <Popover.Button 
-                            className="tooltip tooltip-top p-1 pt-3 text-gray-400 hover:text-gray-500 cursor-pointer"
+                            className="tooltip tooltip-top p-1 pt-3 text-gray-400 hover:text-rose-500 cursor-pointer"
                             data-tip = "Send emoji"
                         >
                             <FaceSmileIcon className="w-6 h-6" />
@@ -220,7 +204,7 @@ const MessageInput = ({ conversation = null }) => {
                         too long, show the loader animation.
                     */}
                     <button 
-                        className="btn bg-sky-400 rounded-xl text-gray-800 hover:bg-sky-300"
+                        className="btn btn-circle bg-emerald-400 text-gray-800 hover:bg-emerald-300"
                         onClick={sendMessage}
                         disabled={messageSending}
                     >
@@ -229,7 +213,7 @@ const MessageInput = ({ conversation = null }) => {
                             : (
                                 <>
                                     <PaperAirplaneIcon className="w-6" />
-                                    <span className="hidden sm:inline">Send</span>
+                                    {/* <span className="hidden sm:inline">Send</span> */}
                                 </>
                             )
                         }
@@ -255,10 +239,10 @@ const MessageInput = ({ conversation = null }) => {
 
                 {/* Show the image/file upload progress in a toast notification */}
                 {!!uploadProgress && (
-                    <div className="toast toast-top toast-center mt-14">
-                        <div className="alert bg-sky-200 px-6 shadow-sm">
+                    <div className="toast toast-bottom toast-center mx-auto w-auto mb-20">
+                        <div className="alert bg-slate-200 shadow-sm px-6">
                             <div>
-                                <span>Uploading</span>
+                                <span className="select-none">Uploading</span>
                             </div>
                             <div 
                                 className="radial-progress" 
@@ -269,7 +253,7 @@ const MessageInput = ({ conversation = null }) => {
                                 }} 
                                 role="progressbar"
                             >
-                                <span className="text-xs">{uploadProgress}%</span>
+                                <span className="text-xs select-none">{uploadProgress}%</span>
                             </div>
                         </div>
                     </div>
@@ -279,7 +263,7 @@ const MessageInput = ({ conversation = null }) => {
                 {inputErrorMessage && (errorModal.showModal())}
 
                 {/* The uploaded files can be previewed in this section */}
-                <div className="flex flex-wrap gap-1 mt-2 ">
+                <div className="flex flex-wrap pl-2 gap-2 mt-2 ">
                     {chosenFiles.map((file) => (
                         <div
                             key={file.file.name}
