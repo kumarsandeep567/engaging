@@ -238,7 +238,7 @@ const MessageInput = ({ conversation = null }) => {
                 </dialog>
 
                 {/* Show the image/file upload progress in a toast notification */}
-                {!!uploadProgress && (
+                {!!uploadProgress && chosenFiles.length > 0 && (
                     <div className="toast toast-bottom toast-center mx-auto w-auto mb-20">
                         <div className="alert bg-slate-200 shadow-sm px-6">
                             <div>
