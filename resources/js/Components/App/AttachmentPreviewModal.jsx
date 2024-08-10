@@ -28,15 +28,15 @@ export default function AttachmentPreviewModal({
     
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    // Computed property
-    const attachment = useMemo(() => {
-        return attachments[currentIndex];
-    }, [attachments, currentIndex]);
-
     // Fetch the list of previewable attachments
     const previewableAttachments = useMemo(() => {
         return attachments.filter((attachment) => isPreviewable(attachment));
     }, [attachments]);
+
+    // Computed property
+    const attachment = useMemo(() => {
+        return previewableAttachments[currentIndex];
+    }, [attachments, currentIndex]);
 
     // Close button for the modal
     const close = () => {
@@ -114,7 +114,7 @@ export default function AttachmentPreviewModal({
                                         onClick={prev}
                                         className="absolute opacity-100 text-gray-100 cursor-pointer flex items-center justify-center w-16 h-16 left-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 z-30"
                                     >
-                                        <ChevronLeftIcon className="w=12" />
+                                        <ChevronLeftIcon className="w-10" />
                                     </div>
                                 )}
 
@@ -123,7 +123,7 @@ export default function AttachmentPreviewModal({
                                         onClick={next}
                                         className="absolute opacity-100 text-gray-100 cursor-pointer flex items-center justify-center w-16 h-16 right-4 top-1/2 -translate-y-1/2 rounded-full bg-black/50 z-30"
                                     >
-                                        <ChevronRightIcon className="w=12" />
+                                        <ChevronRightIcon className="w-10" />
                                     </div>
                                 )}
 
@@ -170,7 +170,7 @@ export default function AttachmentPreviewModal({
                                         {!isPreviewable(attachment) && (
                                             <div className="p-32 flex flex-col justify-center items-center text-gray-100">
                                                 <PaperClipIcon className="w-10 h-10 mb-3" />
-                                                <small>{attachment.name}</small>
+                                                <small className="select-none">{attachment.name}</small>
                                             </div>
                                         )}
 
