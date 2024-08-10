@@ -26,10 +26,10 @@ class StoreMessageRequest extends FormRequest
         return [
             'message'       => 'nullable|string',
 
-            // Group ID is needed, if Receiver ID is null
+            // Group ID is needed if Receiver ID is null
             'group_id'      => 'required_without:receiver_id|nullable|exists:groups,id',
 
-            // Receiver ID is needed, if Group ID is null
+            // Receiver ID is needed if Group ID is null
             'receiver_id'   => 'required_without:group_id|nullable|exists:users,id',
 
             // Number of files that can be uploaded at a time
