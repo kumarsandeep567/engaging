@@ -2,7 +2,7 @@ import { Link, usePage } from "@inertiajs/react";
 import UserAvatar from "@/Components/App/UserAvatar";
 import GroupAvatar from "@/Components/App/GroupAvatar";
 import UserOptionsDropdown from "@/Components/App/UserOptionsDropdown";
-import formatMessageDate from "@/helpers";
+import formatMessageDate, { truncateText } from "@/helpers";
 import ReactMarkdown from "react-markdown";
 
 /**
@@ -36,7 +36,7 @@ const ConversationItem = ({
             !conversation.is_group &&
             selectedConversation.id == conversation.id
         ) {
-            classes = ` border-blue-400 bg-black/10`
+            classes = ` border-emerald-500 bg-black/10`
         }
 
         // Apply custom classes if the selected conversation
@@ -46,31 +46,9 @@ const ConversationItem = ({
             conversation.is_group &&
             selectedConversation.id == conversation.id
         ) {
-            classes = ` border-teal-400 bg-black/10`
+            classes = ` border-teal-500 bg-black/10`
         }
     }
-
-    // Since only 34 characters fit nicely on the 
-    const truncateText = (text, maxLength = 34) => {
-
-        if (!text) {
-            return;
-        }
-
-        if (text.length <= maxLength) {
-            return text;
-        }
-        
-        // Length of the text exceeds the specified length, truncate it.
-        let truncated = text.slice(0, maxLength);
-        const lastSpaceIndex = truncated.lastIndexOf(' ');
-    
-        if (lastSpaceIndex > 0) {
-            truncated = truncated.slice(0, lastSpaceIndex).concat(' ...');
-        }
-
-        return truncated;
-    };
 
     return (
 
@@ -138,7 +116,7 @@ const ConversationItem = ({
                 { conversation.last_message_date && (
                     <p className="text-xs text-nowrap overflow-hidden text-ellipsis">
                         <ReactMarkdown>
-                            {truncateText(conversation.last_message)}
+                            {truncateText(conversation.last_message, 34)}
                         </ReactMarkdown>
                     </p>
                 )
@@ -148,7 +126,7 @@ const ConversationItem = ({
             {/* Display the additional options for administrator users */}
             { currentUser.is_admin && conversation.is_user
                 ? <UserOptionsDropdown conversation = {conversation} />
-                : ''
+                : <div></div>
             }
         </Link>
     );

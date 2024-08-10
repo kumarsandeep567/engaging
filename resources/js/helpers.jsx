@@ -70,6 +70,31 @@ export const isYesterday = (date, yesterday) => {
     );
 };
 
+/**
+ * A helper function to truncate texts.
+ */
+
+export const truncateText = (text, maxLength = 34) => {
+
+    if (!text) {
+        return;
+    }
+
+    if (text.length <= maxLength) {
+        return text;
+    }
+    
+    // Length of the text exceeds the specified length, truncate it.
+    let truncated = text.slice(0, maxLength);
+    const lastSpaceIndex = truncated.lastIndexOf(' ');
+
+    if (lastSpaceIndex > 0) {
+        truncated = truncated.slice(0, lastSpaceIndex).concat(' ...');
+    }
+
+    return truncated;
+};
+
 
 /**
  * A helper function to check if given file is an image.
@@ -111,7 +136,7 @@ export const isAudio = (attachment) => {
 export const isPDF = (attachment) => {
     let mime = attachment.mime || attachment.type;
     mime = mime.split("/");
-    return mime === "application/pdf";
+    return mime[0] === "application" && mime[1] === "pdf";
 };
 
 
