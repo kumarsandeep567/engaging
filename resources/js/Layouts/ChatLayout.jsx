@@ -213,7 +213,7 @@ const ChatLayout = ({children}) => {
                             data-tip = "Create a new group"
                         >
                             <button 
-                                className = "btn btn-circle w-12 h-6 bg-sky-300 text-gray-800 hover:bg-sky-200 hover:text-gray-600"
+                                className = "btn btn-sm btn-circle bg-emerald-400 text-gray-800 hover:bg-emerald-300 hover:text-gray-600"
                                 onClick = {(ev) => setShowGroupModal(true)}
                             >
                                 <PlusIcon className = "w-5 h-5 inline-block" />

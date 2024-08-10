@@ -1,7 +1,7 @@
 import { 
     PlayCircleIcon,
     ArrowDownTrayIcon,
-    DocumentArrowDownIcon
+    DocumentArrowDownIcon,
 } from "@heroicons/react/24/outline";
 import { 
     isPDF,
@@ -24,7 +24,7 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                                 ` group flex flex-col items-center justify-center text-gray-500 relative cursor-pointer ` + (
                                     isAudio(attachment)
                                     ? "w-84"
-                                    : "w-32 aspect-square bg-sky-200"
+                                    : "w-32 aspect-square bg-black/0 rounded-lg"
                             )}
                         >
                             {/* Provide a download button if the attachment is not an audio */}
@@ -34,7 +34,7 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                                     onClick={(ev) => ev.stopPropagation()}
                                     download
                                     href={attachment.url}
-                                    className="z-20 opacity-100 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-0 top-0 cursor-pointer hover:bg-gray-800"
+                                    className="z-20 opacity-100 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-600 rounded absolute right-0 top-0 cursor-pointer hover:bg-gray-800"
                                 >
                                     <ArrowDownTrayIcon className="w-4 h-4" />
                                 </a>
@@ -52,7 +52,7 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                             {/* Video attachments */}
                             {isVideo(attachment) && (
                                 <div className="relative flex justify-center items-center">
-                                    <PlayCircleIcon className="z-20 absolute w-16 h-16 text-white opacity-70" />
+                                    <PlayCircleIcon className="z-20 absolute w-10 h-10 text-white opacity-70" />
 
                                     {/* This <div> is needed to trigger the attachmentClick() method */}
                                     {/* Removing it will cause the video to directly start playing */}
@@ -91,12 +91,14 @@ const MessageAttachments = ({ attachments, attachmentClick }) => {
                                     onClick={(ev) => ev.stopPropagation()}
                                     download
                                     href={attachment.url}
-                                    className="z-20 opacity-100 group-hover:opacity-100 transition-all w-8 h-8 flex items-center justify-center text-gray-100 bg-gray-700 rounded absolute right-0 top-0 cursor-pointer hover:bg-gray-800"
+                                    className="flex flex-col justify-center items-center"
                                 >
                                     <DocumentArrowDownIcon className="w-10 h-10 mb-3" />
 
                                     {/* Show the name of the attachment */}
-                                    <small className="text-center">{attachment.name}</small>
+                                    <small className="text-center text-gray-800">
+                                        {attachment.name}
+                                    </small>
                                 </a>
                             )}
                         </div>

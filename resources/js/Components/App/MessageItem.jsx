@@ -48,7 +48,7 @@ const MessageItem = ({ message, attachmentClick }) => {
                 className = {
                     "chat-bubble w-auto max-w-sm md:max-w-xl min-w-0  " + (
                         message.sender_id === currentUser.id
-                        ? " bg-sky-200"
+                        ? " bg-blue-200"
                         : ' bg-gray-200'
                     )
                 }

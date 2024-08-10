@@ -212,10 +212,10 @@ function Home({ selectedConversation = null, messages = null }) {
                 <div className="flex flex-col gap-8 justify-center items-center text-center h-full opacity-35 select-none">
                     <div className="flex flex-col items-center text-2xl md:text-4xl">
                         <ApplicationLogo className="block h-12 mb-4 fill-current text-gray-800 dark:text-gray-200" />
-                        <span className="dark:text-gray-200">Welcome to {appName} messenger!</span>
+                        <span className="dark:text-gray-100">Welcome to {appName} messenger!</span>
                     </div>
                     <div className="text-xl md:text-2xl">
-                        <div className="dark:text-gray-200">Start a new chat or select a chat to see the messages</div>
+                        <div className="dark:text-gray-100">Start a new chat or select a chat to see the messages</div>
                     </div>
                 </div>
             )}
