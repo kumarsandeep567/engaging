@@ -15,6 +15,7 @@ import { Popover, Transition } from "@headlessui/react";
 import CustomAudioPlayer from "@/Components/App/CustomAudioPlayer";
 import AttachmentPreview from "@/Components/App/AttachmentPreview";
 import { isAudio, isImage } from "@/helpers";
+import AudioRecorder from "./AudioRecorder";
 
 /**
  * This component will provide a bottom panel for the text field, attachment, 
@@ -104,26 +105,40 @@ const MessageInput = ({ conversation = null }) => {
                 const progress = Math.round(
                     (progressEvent.loaded / progressEvent.total) * 100
                 );
-
-                // For now, just log the progress
-                console.log("Upload progress: ", progress);
                 setUploadProgress(progress);
             }
         }).then((response) => {
+
             setNewMessage("");
             setUploadProgress(0);
             setChosenFiles([]);
             setMessageSending(false);
-            console.log("UPLOAD RESPONSE: ", response);
+
         }).catch((error) => {
+
             setChosenFiles([]);
             setMessageSending(false);
             setUploadProgress(0);
+
             const errorMessage = error?.response?.data?.message;
             setInputErrorMessage(errorMessage || "Something went wrong while trying to send the message..!");
             console.log("UPLOAD ERROR: ", errorMessage);
         });
 
+    };
+
+    // When the recorded audio message is ready to be uploaded,
+    // update chosen files
+    const recordedAudioReady = (file, url) => {
+        setChosenFiles((prevFiles) => {
+            return [
+                ...prevFiles,
+                {
+                    file: file,
+                    url: url
+                }
+            ];
+        });
     };
 
 
@@ -165,6 +180,11 @@ const MessageInput = ({ conversation = null }) => {
                             className="absolute top-0 bottom-0 left-0 right-0 opacity-0 z-20 cursor-pointer"
                         />
                     </button>
+
+                    {/* Audio recorder button */}
+                    <AudioRecorder 
+                        fileReady={recordedAudioReady}
+                    />
 
                     {/* Show the emoji icon */}
                     <Popover className="relative">
