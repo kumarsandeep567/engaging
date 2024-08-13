@@ -129,16 +129,15 @@ const MessageInput = ({ conversation = null }) => {
 
     // When the recorded audio message is ready to be uploaded,
     // update chosen files
-    const recordedAudioReady = (file, url) => {
-        setChosenFiles((prevFiles) => {
-            return [
-                ...prevFiles,
-                {
-                    file: file,
-                    url: url
-                }
-            ];
-        });
+    const recordedAudioReady = (file, url, duration) => {
+        setChosenFiles((prevFiles) => [
+            ...prevFiles,
+            {
+                file: file,
+                url: url,
+                duration: duration
+            }
+        ]);
     };
 
 
@@ -259,21 +258,21 @@ const MessageInput = ({ conversation = null }) => {
 
                 {/* Show the image/file upload progress in a toast notification */}
                 {!!uploadProgress && chosenFiles.length > 0 && (
-                    <div className="toast toast-bottom toast-center mx-auto w-auto mb-20">
-                        <div className="alert bg-slate-200 shadow-sm px-6">
+                    <div className="toast toast-bottom toast-center mx-auto w-auto mb-32">
+                        <div className="alert bg-green-200 shadow-sm px-6 py-4 rounded-xl">
                             <div>
-                                <span className="select-none">Uploading</span>
+                                <span className="select-none font-medium">Uploading</span>
                             </div>
                             <div 
                                 className="radial-progress" 
                                 style={{ 
                                     "--value": `${uploadProgress || 0}`, 
-                                    "--size": "3rem", 
-                                    "--thickness": "5px" 
+                                    "--size": "3.5rem", 
+                                    "--thickness": "7px" 
                                 }} 
                                 role="progressbar"
                             >
-                                <span className="text-xs select-none">{uploadProgress}%</span>
+                                <span className="text-xs select-none font-medium">{uploadProgress}%</span>
                             </div>
                         </div>
                     </div>
