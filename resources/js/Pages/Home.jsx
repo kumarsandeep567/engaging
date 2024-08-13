@@ -58,7 +58,8 @@ function Home({ selectedConversation = null, messages = null }) {
          */
         if (
             selectedConversation &&
-            selectedConversation.is_user && (
+            selectedConversation.is_user && 
+            message.receiver_id !== null && (
                 selectedConversation.id == message.sender_id ||
                 selectedConversation.id == message.receiver_id
             )
