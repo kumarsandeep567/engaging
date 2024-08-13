@@ -55,8 +55,14 @@ const AudioRecorder = ({ fileReady }) => {
                 // Create a hyperlink to the audio file
                 const url = URL.createObjectURL(audioFile);
 
-                // File is ready to be added to chosenFiles
-                fileReady(audioFile, url)
+                // Create an Audio element to load the audio file and get the duration
+                const audioElement = new Audio(url);
+                audioElement.addEventListener("loadedmetadata", () => {
+                    const duration = audioElement.duration;
+
+                    // Pass the file, url, and duration to the fileReady callback
+                    fileReady(audioFile, url, duration);
+                });
             });
 
             tempMediaRecorder.start();
