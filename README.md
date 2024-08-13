@@ -11,15 +11,15 @@ What works:
 7) Update conversation list when new messages are received
 8) Added emoji support
 9) Image/file upload (as attachments)
+10) Message notifications
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
-1) Message notifications
-2) Support profile photos for users and groups
-3) Allow users to delete their messages
-4) Implement group chat operations (Add new members, etc)
+1) Support profile photos for users and groups
+2) Allow users to delete their messages
+3) Implement group chat operations (Add new members, etc)
 
 Deployment (AWS): \
 *Coming soon ...*
