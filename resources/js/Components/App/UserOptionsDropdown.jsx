@@ -62,12 +62,12 @@ export default function UserOptionsDropdown({ conversation }) {
                 </div>
                 <Transition
                     as          = {Fragment} 
-                    enter       = "transition ease-out duration-100"
-                    enterFrom   = "transform opacity-0 scale-95"
-                    enterTo     = "transform opacity-100 scale-95"
-                    leave       = "transform ease-in duration-75"
-                    leaveFrom   = "transform opacity-100"
-                    leaveTo     = "transform opacity-0 scale-95"
+                    enter       ="transition duration-100 ease-out"
+                    enterFrom   ="transform scale-95 opacity-0"
+                    enterTo     ="transform scale-100 opacity-100"
+                    leave       ="transition duration-95 ease-out"
+                    leaveFrom   ="transform scale-100 opacity-100"
+                    leaveTo     ="transform scale-95 opacity-0"
                 >
                     <Menu.Items className = "absolute right-0 mt-2 w-48 rounded-md bg-gray-100 shadow-lg z-50 dark:bg-gray-800">
                         <div className = "px-1 py-1">

@@ -8,11 +8,7 @@ const UserAvatar = ({ user, online = null, profile = false }) => {
     // This will be used for CSS class
     let onlineClass = online === true
         ? "online"
-        : (
-            online === false
-            ? "offline"
-            : ""
-        );
+        : "";
     
     // Define how large should the profile photo be
     const sizeClass = profile ? "w-40" : "w-8";
