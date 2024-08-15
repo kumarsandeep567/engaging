@@ -154,7 +154,7 @@ class MessageController extends Controller
     }
 
     /**
-     * Method to delete a message and return an HTTP 204
+     * Method to delete a message and return the last deleted message.
      */
     public function destroy(Message $message)
     {
@@ -166,8 +166,41 @@ class MessageController extends Controller
             ], 403);
         }
 
+        $group = null;
+        $conversation = null;
+
+        // Get the last message of the conversation (personal chat or group)
+        if($message->group_id)
+        {
+            $group = Group::where('last_message_id', $message->id)->first();
+        }
+        else
+        {
+            $conversation = Conversation::where('last_message_id', $message->id)->first();
+        }
+
+        // Delete the message
         $message->delete();
 
-        return response('', 204);
+        // Check if the message that belongs to a conversation is the last message
+        // or not
+        if($group)
+        {
+            // Update the group data to have a new last message
+            $group = Group::find($group->id);
+            $lastMessage = $group->lastMessage;
+        }
+        else if ($conversation)
+        {
+            // Update the conversation data to have a new last message
+            $conversation = Conversation::find($conversation->id);
+            $lastMessage = $conversation->lastMessage;
+        }
+
+        return response()->json([
+            'message' => $lastMessage
+            ? new MessageResource($lastMessage)
+            : null
+        ]);
     }
 }

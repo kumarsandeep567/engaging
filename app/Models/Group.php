@@ -47,6 +47,14 @@ class Group extends Model
     {
         return $this->belongsTo(User::class);
     } 
+
+    /**
+     * Get the last message id for the group
+     */
+    public function lastMessage()
+    {
+        return $this->belongsTo(Message::class, 'last_message_id');
+    }
     
     /**
      * Get the list of groups (with their last messages) 
