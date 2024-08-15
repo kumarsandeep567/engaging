@@ -12,14 +12,14 @@ What works:
 8) Added emoji support
 9) Image/file upload (as attachments)
 10) Message notifications
+11) Users can delete their own messages
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
 1) Support profile photos for users and groups
-2) Allow users to delete their messages
-3) Implement group chat operations (Add new members, etc)
+2) Implement group chat operations (Add new members, etc)
 
 Deployment (AWS): \
 *Coming soon ...*
