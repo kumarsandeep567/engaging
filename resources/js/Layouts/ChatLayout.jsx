@@ -70,12 +70,23 @@ const ChatLayout = ({children}) => {
         });
     };
 
+    // Update the conversation side only when the last message is deleted
+    const messageDeleted = ({ prevMessage }) => {
+        if (!prevMessage) {
+            return;
+        }
+
+        messageCreated(prevMessage);
+    };
+
     // Listen on the Event Bus for new message events
     useEffect(() => {
         const offCreated = on("message.created", messageCreated);
+        const offDeleted = on("message.deleted", messageDeleted);
 
         return () => {
             offCreated();
+            offDeleted();
         };
     }, [on]);
 
@@ -199,7 +210,7 @@ const ChatLayout = ({children}) => {
                 
                 {/* Left section of ChatLayout */}
                 <div className = {
-                    `flex flex-col w-full sm:w-[220px] md:w-[300px] overflow-hidden transition-all 
+                    `flex flex-col w-full sm:w-[220px] md:w-[300px] overflow-hidden transition-all border-r  
                     ${ selectedConversation ? "-ml-[100%] sm:ml-0" : "" }`
                 }>
                     

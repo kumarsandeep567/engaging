@@ -38,6 +38,7 @@ function Home({ selectedConversation = null, messages = null }) {
     const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
     const [previewAttachment, setPreviewAttachment] = useState({});
 
+    // Update the messages of a conversation when new ones are received
     const messageCreated = (message) => {
 
         /**
@@ -65,6 +66,41 @@ function Home({ selectedConversation = null, messages = null }) {
             )
         ) {
             setLocalMessages((prevMessages) => [...prevMessages, message]);
+        }
+    };
+
+    // Update the messages of a conversation when existing messages are deleted
+    const messageDeleted = ({ message }) => {
+        
+        /**
+         * If the selected conversation is a group, and a message is 
+         * deleted in that group, then update the group chat. 
+         */
+        if (
+            selectedConversation &&
+            selectedConversation.is_group &&
+            selectedConversation.id == message.group_id
+        ) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id);
+            });
+        }
+
+        /**
+         * If the selected conversation is a personal chat, and a message  
+         * is deleted, then update the personal chat. 
+         */
+        if (
+            selectedConversation &&
+            selectedConversation.is_user && 
+            message.receiver_id !== null && (
+                selectedConversation.id == message.sender_id ||
+                selectedConversation.id == message.receiver_id
+            )
+        ) {
+            setLocalMessages((prevMessages) => {
+                return prevMessages.filter((m) => m.id !== message.id);
+            });
         }
     };
 
@@ -147,8 +183,11 @@ function Home({ selectedConversation = null, messages = null }) {
             }
         }, 10);
 
-        // Create a handler to unsubscribe from the broadcast channel
+        // Create a handler to listen to the 'message.created' broadcast event
         const offCreated = on("message.created", messageCreated);
+
+        // Create a handler to listen to the 'message.deleted' broadcast event
+        const offDeleted = on("message.deleted", messageDeleted);
 
         // Set the scroll bar to drop to the bottom
         setScrollFromBottom(0);
@@ -158,6 +197,7 @@ function Home({ selectedConversation = null, messages = null }) {
 
         return () => {
             offCreated();
+            offDeleted();
         };
     });
 
