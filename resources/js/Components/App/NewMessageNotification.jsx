@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from "uuid";
 import UserAvatar from "@/Components/App/UserAvatar";
 import { Link } from "@inertiajs/react";
 import GroupAvatar from "./GroupAvatar";
+import { truncateText } from "@/helpers";
 
 export default function NewMessageNotification({ type = 'info', duration = 8000 }) {
 
@@ -69,7 +70,7 @@ export default function NewMessageNotification({ type = 'info', duration = 8000 
                         <div>
                             {/* Notification content */}
                             <p className="text-gray-900 font-semibold">{toast.user.name}</p>
-                            <p className="text-gray-600 text-sm">{toast.message}</p>
+                            <p className="text-gray-600 text-sm">{truncateText(toast.message.toString(), 20)}</p>
                         </div>
                     </div>
 
