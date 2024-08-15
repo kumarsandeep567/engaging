@@ -4,6 +4,7 @@ import React from "react";
 import UserAvatar from "./UserAvatar";
 import formatMessageDate from "@/helpers";
 import MessageAttachments from "@/Components/App/MessageAttachments";
+import MessageOptionsDropdown from "./MessageOptionsDropdown";
 
 /**
  * This component will provide the input field for the user to type a text 
@@ -68,6 +69,11 @@ const MessageItem = ({ message, attachmentClick }) => {
                         attachmentClick = {attachmentClick}
                     />
                 </div>
+
+                {/* Additional options (overflow menu) for each message (like delete, etc) */}
+                {message.sender_id == currentUser.id && (
+                    <MessageOptionsDropdown message={message} />
+                )}
             </div>
         </div>
     );
