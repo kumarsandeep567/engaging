@@ -5,6 +5,7 @@ import { PlusIcon } from "@heroicons/react/24/outline";
 import TextInput from "@/Components/TextInput";
 import ConversationItem from "@/Components/App/ConversationItem";
 import { useEventBus } from "@/EventBus";
+import GroupModal from "@/Components/App/GroupModal";
 
 const ChatLayout = ({children}) => {
 
@@ -38,6 +39,9 @@ const ChatLayout = ({children}) => {
     const [localConversations, setLocalConversations] = useState([]);
 
     const [sortedConversations, setSortedConversations] = useState([]);
+
+    // Toggle for group modal
+    const [showGroupModal, setShowGroupModal] = useState(false);
 
     // Update the conversation sidebar when a new message is received
     const messageCreated = (message) => {
@@ -263,6 +267,12 @@ const ChatLayout = ({children}) => {
                     {children}
                 </div>
             </div>
+
+            {/* Modal for group chats */}
+            <GroupModal 
+                show={showGroupModal}
+                onClose={() => setShowGroupModal(false)}
+            />
         </>
     );
 };

@@ -1,13 +1,39 @@
 import { Link, usePage } from "@inertiajs/react";
+import UserAvatar from "@/Components/App/UserAvatar";
+import GroupAvatar from "@/Components/App/GroupAvatar";
+import { useEventBus } from "@/EventBus";
+import GroupDescriptionPopover from "@/Components/App/GroupDescriptionPopover";
+import GroupUsersPopover from "@/Components/App/GroupUsersPopover";
 import { ChevronLeftIcon } from "@heroicons/react/24/solid";
-import UserAvatar from "./UserAvatar";
-import GroupAvatar from "./GroupAvatar";
+import { Cog6ToothIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 /**
- * This component will render the name of the chat (group or personal)
- * along with the icon for the respective chat.
+ * This component will render the name of the chat (group or personal),
+ * chat icon, along with any additional information that needs to be displayed.
  */
 const ConversationHeader = ({selectedConversation}) => {
+
+    const page = usePage();
+
+    const authUser = page.props.auth.user;
+
+    const { emit } = useEventBus();
+
+    // Method to delete a group chat
+    const onDeleteGroup = () => {
+        if (!window.confirm("Are you sure you want to delete the group?")) {
+            return;
+        }
+
+        axios.delete(route("group.destroy", selectedConversation.id))
+        .then((res) => {
+            console.log("SUCCESS: Group deleted", res.data);
+        })
+        .catch((error) => {
+            console.log("ERROR: Could not delete group", error);
+        });
+    };
+
     return (
         <>
             { selectedConversation && (
@@ -47,6 +73,54 @@ const ConversationHeader = ({selectedConversation}) => {
                             )}
                         </div>
                     </div>
+
+                    {/* Show the additional info about the group (like description), if available */}
+                    {selectedConversation.is_group && (
+                        <div className="flex gap-3">
+
+                            {/* Group description component */}
+                            <GroupDescriptionPopover 
+                                description={selectedConversation.description} 
+                            />
+
+                            {/* Show the group member's avatar, if available */}
+                            <GroupUsersPopover 
+                                users={selectedConversation.users} 
+                            />
+
+                            {/* Group owners (i.e., the creators of the group) 
+                            will see options to edit the group's additional info */}
+                            {selectedConversation.owner_id == authUser.id && (
+                                <>
+                                    <div
+                                        className="tooltip tooltip-left"
+                                        data-tip="Edit Group"
+                                    >
+                                        <button
+                                            onClick={(ev) => emit(
+                                                "GroupModal.show", 
+                                                selectedConversation
+                                            )}
+                                            className="text-gray-800 hover:text-gray-500"
+                                        >
+                                            <Cog6ToothIcon className="w-4" />
+                                        </button>
+                                    </div>
+                                    <div
+                                        className="tooltip tooltip-left"
+                                        data-tip="Delete Group"
+                                    >
+                                        <button
+                                            onClick={onDeleteGroup}
+                                            className="text-gray-800 hover:text-gray-500"
+                                        >
+                                            <TrashIcon className="w-4" />
+                                        </button>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
             )}
         </>
