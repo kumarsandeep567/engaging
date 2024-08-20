@@ -72,6 +72,9 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
     const closeModal = () => {
         reset();
         onClose();
+        setTimeout(() => {
+            setGroup({});
+        }, 1000);
     };
 
     useEffect(() => {
@@ -97,7 +100,7 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
                 className="p-6 overflow-y-auto"
             >
                 {/* Modal header */}
-                <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100">
+                <h2 className="text-xl font-medium text-gray-900 dark:text-gray-100 select-none">
                     {group.id 
                         ? `Edit Group "${group.name}"`
                         : "Create a new group"
@@ -107,7 +110,7 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
                 {/* Form fields */}
 
                 {/* The group name field */}
-                <div className="mt-8">
+                <div className="mt-8 select-none">
                     <InputLabel htmlFor="name" value="Name" />
                     <TextInput 
                         id="name"
@@ -122,12 +125,12 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
                 </div>
 
                 {/* The group description field */}
-                <div className="mt-4">
+                <div className="mt-4 select-none">
                     <InputLabel htmlFor="description" value="Description" />
                     <TextAreaInput 
                         id="description"
                         rows="3"
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full resize-none"
                         value={data.description || ""}
                         onChange={(e) => setData("description", e.target.value)}
                     />
@@ -135,7 +138,7 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
                 </div>
 
                 {/* The group members field */}
-                <div className="mt-4">
+                <div className="mt-4 select-none">
                     <InputLabel value="Select Users" />
 
                     {/* Show the group members except the group owner */}
