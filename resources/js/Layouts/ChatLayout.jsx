@@ -1,4 +1,4 @@
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { useEffect } from "react";
 import { PlusIcon } from "@heroicons/react/24/outline";
@@ -20,7 +20,7 @@ const ChatLayout = ({children}) => {
     const page = usePage();
 
     // Load the Event Bus
-    const { on } = useEventBus();
+    const { on, emit } = useEventBus();
 
     // Keep track of online users (as an onject instead of array)
     const [onlineUsers, setOnlineUsers] = useState({});
@@ -87,9 +87,33 @@ const ChatLayout = ({children}) => {
     useEffect(() => {
         const offCreated = on("message.created", messageCreated);
         const offDeleted = on("message.deleted", messageDeleted);
+        const offModalShow = on("GroupModal.show", (group) => {
+            setShowGroupModal(true);
+        });
+
+        // If a group event is deleted, the update the conversation sidebar,
+        // and display a toast notification
+        const offGroupDelete = on("group.deleted", ({ id, name}) => {
+            setLocalConversations((oldConversations) => {
+                return oldConversations.filter((convo) => convo.id != id);
+            });
+
+            emit('toast.show', `Group ${name} was deleted`);
+
+            // If the selected conversation is a group chat, and is deleted,
+            // redirect to homepage
+            if (
+                !selectedConversation || 
+                (selectedConversation.is_group && selectedConversation.id == id)
+            ) {
+                router.visit(route("dashboard"));
+            }
+        });
 
         return () => {
             offCreated();
+            offDeleted();
+            offModalShow();
             offDeleted();
         };
     }, [on]);
