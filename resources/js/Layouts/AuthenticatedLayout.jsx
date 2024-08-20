@@ -80,6 +80,19 @@ export default function Authenticated({ header, children }) {
                     }`
                 });
             });
+
+            if (conversation.is_group) {
+                Echo.private(`group.deleted.${conversation.id}`)
+                .listen("GroupDeleted", (e) => {
+                    emit("group.deleted", {
+                        id: e.id,
+                        name: e.name
+                    });
+                })
+                .error((e) => {
+                    console.error(e);
+                });
+            }
         });
 
         // Stop listening for any event in the broadcast channels
@@ -96,6 +109,10 @@ export default function Authenticated({ header, children }) {
                     .join("-")}`;
                 }
                 Echo.leave(channel);
+
+                if (conversation.is_group) {
+                    Echo.leave(`group.deleted.${conversation.id}`);
+                }
             });
         };
     }, [conversations]);
