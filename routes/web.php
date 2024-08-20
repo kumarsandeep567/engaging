@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
@@ -28,6 +29,14 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Route to load older messages (personal and group)
     Route::get('/message/older/{message}', [MessageController::class, 'loadOlderMessages'])->name('message.loadOlder');
 
+    // Route to create a new group
+    Route::post('/group', [GroupController::class, 'store'])->name('group.store');
+
+    // Route to update an existing group
+    Route::put('/group/{group}', [GroupController::class, 'update'])->name('group.update');
+
+    // Route to delete a group
+    Route::delete('/group/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
 });
 
 Route::middleware('auth')->group(function () {
