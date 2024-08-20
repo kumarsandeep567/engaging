@@ -39,10 +39,17 @@ Broadcast::channel('message.user.{userId1}-{userId2}', function (
  * Create a channel for every group chat.
  * Ensure the user is a member of the group.
  */
-Broadcast::channel('message.group.{groupId}', function (
-    User $user, int $groupId
-) {
+Broadcast::channel('message.group.{groupId}', function (User $user, int $groupId) {
     return ($user->groups->contains('id', $groupId))
     ? $user
     : null;
+});
+
+
+/**
+ * Create a channel for broadcasting group deleted events.
+ * Ensure the user is a member of the group.
+ */
+Broadcast::channel('group.deleted.{groupId}', function (User $user, int $groupId) {
+    return ($user->groups->contains('id', $groupId));
 });
