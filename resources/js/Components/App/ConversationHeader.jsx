@@ -27,6 +27,7 @@ const ConversationHeader = ({selectedConversation}) => {
 
         axios.delete(route("group.destroy", selectedConversation.id))
         .then((res) => {
+            emit("toast.show", res.data.message);
             console.log("SUCCESS: Group deleted", res.data);
         })
         .catch((error) => {
@@ -103,7 +104,7 @@ const ConversationHeader = ({selectedConversation}) => {
                                             )}
                                             className="text-gray-800 hover:text-gray-500"
                                         >
-                                            <Cog6ToothIcon className="w-4" />
+                                            <Cog6ToothIcon className="w-6" />
                                         </button>
                                     </div>
                                     <div
@@ -112,9 +113,9 @@ const ConversationHeader = ({selectedConversation}) => {
                                     >
                                         <button
                                             onClick={onDeleteGroup}
-                                            className="text-gray-800 hover:text-gray-500"
+                                            className="text-gray-800 hover:text-red-600"
                                         >
-                                            <TrashIcon className="w-4" />
+                                            <TrashIcon className="w-6" />
                                         </button>
                                     </div>
                                 </>
