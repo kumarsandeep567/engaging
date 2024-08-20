@@ -74,6 +74,20 @@ php artisan make:observer MessageObserver
 # Create links for the items saved in storage directory
 php artisan storage:link
 
+# Create a group controller with request and resources and link it to the Group models
+php artisan make:controller GroupController --requests --resource --model=Group
+
+# Create a job to delete Group and its contents
+php artisan make:job DeleteGroupJob
+
+# Create an Event to broadcast the group deleted event
+php artisan make:event GroupDeleted
+
+# Create a new GroupResource
+php artisan make:resource GroupResource
+
+# The DeleteGroupJob puts the dispatched jobs in a queue. To process the queue, run
+php artisan queue:listen
 
 Site wide dark theme
 https://daisyui.com/components/theme-controller/
