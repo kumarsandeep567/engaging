@@ -13,15 +13,15 @@ What works:
 9) Image/file upload (as attachments)
 10) Message notifications
 11) Users can delete their own messages
-12) View and edit group info
+12) Create and update group chat info
+13) Added and remove members from the group chats
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
 1) Support profile photos for users and groups
-2) Implement group chat operations (Add new members, etc)
-3) Setup mailing service
+2) Setup mailing service
 
 Deployment (AWS): \
 *Coming soon ...*
