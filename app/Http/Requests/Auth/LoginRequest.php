@@ -41,6 +41,17 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        // Fetch the user via their email
+        // $user = User::where('email', $this->input('email'))->first();
+
+        // If the 'is_blocked_at' contains a timestamp, then the user has been
+        // blocked (and was not unblocked)
+        // if ($user && $user->blocked_at) {
+        //     throw ValidationException::withMessages([
+        //         'email' => "This account is blocked"
+        //     ]);
+        // }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 
