@@ -8,6 +8,8 @@ import { Link, usePage } from '@inertiajs/react';
 import { useEventBus } from '@/EventBus';
 import Toast from '@/Components/App/Toast';
 import NewMessageNotification from '@/Components/App/NewMessageNotification';
+import { UserPlusIcon } from '@heroicons/react/24/outline';
+import NewUserModal from '@/Components/App/NewUserModal';
 
 export default function Authenticated({ header, children }) {
 
@@ -26,6 +28,8 @@ export default function Authenticated({ header, children }) {
 
     // Use the Event Bus for creating broadcasting events
     const { emit } = useEventBus();
+
+    const [showNewUserModal, setShowNewUserModal] = useState(false);
 
     useEffect(() => {
         if (isThemeToggled) {
@@ -132,19 +136,31 @@ export default function Authenticated({ header, children }) {
 
                                 <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                     <NavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                        Dashboard
+                                        Chats
                                     </NavLink>
                                 </div>
                             </div>
 
                             <div className="hidden sm:flex sm:items-center sm:ms-6">
-                                <div className="ms-3 relative">
+                                <div className="flex ms-3 relative">
+
+                                    {/* Add new users button for admins */}
+                                    {user.is_admin && (
+                                        <button
+                                            className='btn btn-sm shadow-none hover:shadow-sm bg-gray-200' 
+                                            onClick={(ev) => setShowNewUserModal(true)}
+                                        >
+                                            <UserPlusIcon className='h-5 w-5' />
+                                            <span className='font-semibold'>Invite</span>
+                                        </button>
+                                    )}
+
                                     <Dropdown>
                                         <Dropdown.Trigger>
                                             <span className="inline-flex rounded-md">
                                                 <button
                                                     type="button"
-                                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
+                                                    className="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150 select-none"
                                                 >
                                                     {user.name}
 
@@ -209,7 +225,7 @@ export default function Authenticated({ header, children }) {
                     <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
                         <div className="pt-2 pb-3 space-y-1">
                             <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
-                                Dashboard
+                                Chats
                             </ResponsiveNavLink>
                         </div>
 
@@ -251,6 +267,12 @@ export default function Authenticated({ header, children }) {
 
             {/* New message notifications */}
             <NewMessageNotification />
+
+            {/* Invite new users */}
+            <NewUserModal
+                show={showNewUserModal}
+                onClose={(ev) => setShowNewUserModal(false)}
+            />
         </>
     );
 }
