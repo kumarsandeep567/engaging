@@ -89,5 +89,11 @@ php artisan make:resource GroupResource
 # The DeleteGroupJob puts the dispatched jobs in a queue. To process the queue, run
 php artisan queue:listen
 
+# Create a new UserController to allow admins to add new users to the group
+php artisan make:controller UserController
+
+# Create a middleware for admins
+php artisan make:middleware AdminUser
+
 Site wide dark theme
 https://daisyui.com/components/theme-controller/
