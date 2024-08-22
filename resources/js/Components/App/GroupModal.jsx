@@ -139,7 +139,7 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
 
                 {/* The group members field */}
                 <div className="mt-4 select-none">
-                    <InputLabel value="Select Users" />
+                    <InputLabel value="Select Members" />
 
                     {/* Show the group members except the group owner */}
                     <UserPicker 
