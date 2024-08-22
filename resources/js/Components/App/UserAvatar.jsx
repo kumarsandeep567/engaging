@@ -11,7 +11,7 @@ const UserAvatar = ({ user, online = null, profile = false }) => {
         : "";
     
     // Define how large should the profile photo be
-    const sizeClass = profile ? "w-40" : "w-8";
+    const sizeClass = profile ? "w-48" : "w-8";
 
     return (
         <>
