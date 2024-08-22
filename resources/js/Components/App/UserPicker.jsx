@@ -38,7 +38,7 @@ export default function UserPicker({ value, options, onSelect }) {
                                 ? `${persons.length} users selected`
                                 : ""
                             }
-                            placeholder="Select users"
+                            placeholder="Click to view your contacts"
                             onChange={(event) => setQuery(event.target.value)}
                         />
                         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -104,8 +104,18 @@ export default function UserPicker({ value, options, onSelect }) {
             </Combobox>
 
             {/* Show the list of users selected in the combobox */}
+            
+            {/* Default member (the group owner) */}
+
             {selected && (
                 <div className="flex flex-wrap gap-2 mt-3">
+                    
+                    {/* Default member (the group owner) */}
+                    <div className="badge badge-lg badge-ghost gap-2">
+                        <span className="font-medium text-sm">Owner: You</span>
+                    </div>
+
+                    {/* Remaining members */}
                     {selected.map((person) => (
                         <div
                             key={person.id}

@@ -265,7 +265,7 @@ const ChatLayout = ({children}) => {
                         <TextInput
                             onKeyUp     = {chatSearchBar}
                             placeholder = "Search for people or groups"
-                            className   = "w-full" 
+                            className   = "w-full select-none" 
                         />
                     </div>
 
