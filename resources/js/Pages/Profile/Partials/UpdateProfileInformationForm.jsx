@@ -4,19 +4,28 @@ import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Link, useForm, usePage } from '@inertiajs/react';
 import { Transition } from '@headlessui/react';
+import UserAvatar from '@/Components/App/UserAvatar';
 
 export default function UpdateProfileInformation({ mustVerifyEmail, status, className = '' }) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } = useForm({
+    const { data, setData, post, errors, processing, recentlySuccessful } = useForm({
         name: user.name,
+        avatar: null,
         email: user.email,
+
+        // For profile update route, Laravel expects a patch() method instead of 
+        // post() method. But patch() method does not accept files as input data. 
+        // To overcome this, _method= has to be provided in the form that will 
+        // be sent out via the post() method on the React side to tell Laravel 
+        // to map this post() method to a patch() method.
+        _method: 'PATCH'
     });
 
     const submit = (e) => {
         e.preventDefault();
 
-        patch(route('profile.update'));
+        post(route('profile.update'));
     };
 
     return (
@@ -30,6 +39,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
             </header>
 
             <form onSubmit={submit} className="mt-6 space-y-6">
+                <UserAvatar user={user} profile={true} />
                 <div>
                     <InputLabel htmlFor="name" value="Name" />
 
@@ -60,6 +70,20 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                     />
 
                     <InputError className="mt-2" message={errors.email} />
+                </div>
+
+                <div>
+                    <InputLabel htmlFor="avatar" value="Profile Picture" className='pb-1'/>
+
+                    <input 
+                        id='avatar'
+                        type="file" 
+                        className='file-input file-input-bordered w-full max-w-xs'
+                        onChange={(e) => setData('avatar', e.target.files[0])}
+                    />
+                    <p className='mt-1 text-sm text-gray-400'>Images upto 1MB are allowed</p>
+
+                    <InputError className="mt-2" message={errors.avatar} />
                 </div>
 
                 {mustVerifyEmail && user.email_verified_at === null && (
