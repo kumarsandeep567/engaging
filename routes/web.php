@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UserController;
 
 /**
  * Allow verified users to access the dashboard
@@ -37,6 +38,20 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     // Route to delete a group
     Route::delete('/group/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
+
+    
+    // Routes for performing administrator operations (with middleware)
+    Route::middleware(['admin'])->group(function () {
+
+        // Route to add a new user
+        Route::post('/user', [UserController::class, 'store'])->name('user.store');
+
+        // Route to make/remove from Administrator
+        Route::post('/user/change-role/{user}', [UserController::class, 'changeRole'])->name('user.changeRole');
+
+        // Route to block a user
+        Route::post('/user/block-unblock/{user}', [UserController::class, 'blockUnblock'])->name('user.blockUnblock');
+    });
 });
 
 Route::middleware('auth')->group(function () {
