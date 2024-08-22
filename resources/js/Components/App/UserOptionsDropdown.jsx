@@ -15,8 +15,11 @@ import {
 } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { Fragment } from "react";
+import { useEventBus } from "@/EventBus";
 
 export default function UserOptionsDropdown({ conversation }) {
+
+    const { emit } = useEventBus();
 
     // Change user role
     const changeUserRole = () => {
@@ -28,10 +31,10 @@ export default function UserOptionsDropdown({ conversation }) {
 
         axios.post(route("user.changeRole", conversation.id))
         .then((response) => {
-            console.log(response.data);
+            emit("toast.show", res.data.message);
         })
         .catch((error) => {
-            console.error(error);
+            console.error("ERROR WHILE UPDATING ROLE: ", error);
         });
     }; 
 
@@ -45,7 +48,7 @@ export default function UserOptionsDropdown({ conversation }) {
 
         axios.post(route("user.blockUnblock", conversation.id))
         .then((response) => {
-            console.log(response.data);
+            emit("toast.show", res.data.message);
         })
         .catch((error) => {
             console.error(error);
@@ -123,7 +126,7 @@ export default function UserOptionsDropdown({ conversation }) {
                                         { conversation.is_admin && (
                                             <>
                                                 <ShieldExclamationIcon className = "w-4 h-4 mr-2 " />
-                                                Dismiss as administrator
+                                                Revoke administrator
                                             </>
                                         )}
 
