@@ -15,13 +15,13 @@ What works:
 11) Users can delete their own messages
 12) Create and update group chat info
 13) Added and remove members from the group chats
+14) User can add/update their profile photos
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
-1) Support profile photos for users and groups
-2) Setup mailing service
+1) Setup mailing service
 
 Deployment (AWS): \
 *Coming soon ...*
