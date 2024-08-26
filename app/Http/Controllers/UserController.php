@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InviteUsers;
+use App\Mail\UserBlockedUnblocked;
+use App\Mail\UserRoleUpdated;
 use App\Models\User;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -17,14 +21,15 @@ class UserController extends Controller
         ]);
 
         // Generate a random password of 12 characters
-        // $defaultPassword = Str::random(12);
-        $defaultPassword = "12345678";
+        $defaultPassword = Str::random(12);
         $data['password'] = bcrypt($defaultPassword);
 
         // Mark the email of the user as verified
         $data['email_verified_at'] = now();
 
-        User::create($data);
+        $user = User::create($data);
+
+        Mail::to($user)->send(new InviteUsers($user, $defaultPassword));
 
         return redirect()->back();
     }
@@ -38,6 +43,8 @@ class UserController extends Controller
         $message = $user->is_admin
         ? $user->name . " is now an administrator"
         : $user->name . " dismissed as administrator";
+
+        Mail::to($user)->send(new UserRoleUpdated($user));
 
         return response()->json([
             'message' => $message
@@ -55,6 +62,8 @@ class UserController extends Controller
         }
 
         $user->save();
+
+        Mail::to($user)->send(new UserBlockedUnblocked($user));
 
         return response()->json([
             'message' => $message
