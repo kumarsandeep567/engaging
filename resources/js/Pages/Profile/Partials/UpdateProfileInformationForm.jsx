@@ -83,7 +83,7 @@ export default function UpdateProfileInformation({ mustVerifyEmail, status, clas
                                     className='file-input file-input-bordered w-full max-w-xs'
                                     onChange={(e) => setData('avatar', e.target.files[0])}
                                 />
-                                <p className='mt-1 text-sm text-gray-400'>Images upto 1MB are allowed</p>
+                                <p className='mt-1 text-sm text-gray-400 select-none'>Images upto 1MB are allowed</p>
 
                                 <InputError className="mt-2" message={errors.avatar} />
                             </div>
