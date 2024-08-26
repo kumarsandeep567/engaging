@@ -16,12 +16,12 @@ What works:
 12) Create and update group chat info
 13) Added and remove members from the group chats
 14) User can add/update their profile photos
+15) Email notifications will be sent out for certain events
 
 What's broken?
 1) Persistent Dark theme
 
 TODO:
-1) Setup mailing service
 
 Deployment (AWS): \
 *Coming soon ...*
