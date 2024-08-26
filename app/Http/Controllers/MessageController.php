@@ -168,6 +168,7 @@ class MessageController extends Controller
 
         $group = null;
         $conversation = null;
+        $lastMessage = null;
 
         // Get the last message of the conversation (personal chat or group)
         if($message->group_id)
