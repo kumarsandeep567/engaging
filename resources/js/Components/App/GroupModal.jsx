@@ -114,7 +114,7 @@ export default function GroupModal({ show = false, onClose = () => {}}) {
                     <InputLabel htmlFor="name" value="Name" />
                     <TextInput 
                         id="name"
-                        className="mt-1 block w-full"
+                        className="mt-1 block w-full disabled:bg-gray-100"
                         value={data.name}
                         disabled={!!group.id}
                         onChange={(e) => setData("name", e.target.value)}
