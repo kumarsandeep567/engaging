@@ -36,6 +36,30 @@ _A real-time messaging platform built with React, Inertia.js, Laravel, Laravel R
 
 ---
 
+## **Take a look**  
+### The Landing Page 
+![LandingPage](screenshots/Landing.png)
+
+### Have a 1:1 conversation with Personal Chats
+![PersonalChats](screenshots/PersonalChats.png)
+
+### Have too many friends? Create a group! 
+![CreateGroups](screenshots/CreateGroups.png)
+
+### Never miss an update on the Tea☕ 
+![GroupChats](screenshots/GroupChats.png)
+
+### Hate suffering alone? Invite your friends to join you.. 
+![InvitePeople](screenshots/InvitePeople.png)
+
+### Be expressive with emojis, photos, and more! 
+![Attachments](screenshots/Attachments.png)
+
+### Be Unique Be You 
+![Profile](screenshots/Profile.png)
+
+---
+
 ## **Installation**  
 
 ***Prerequisite:** Please install [Docker](https://docs.docker.com/get-started/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) on your operating system*
@@ -72,9 +96,11 @@ Follow these steps to set up the project locally:
 
 ## **Troubleshooting**  
 
-- The `docker-compose.yml` file will try loading the database with some dummy data via the `migration_script.sh` script. Please be patient until the process is complete.
+- The `docker-compose.yml` file will try loading the database with some dummy data. Please be patient until the process is complete.
 - If the script fails, you will have to manually load the database. To do this, 
     - Install PHP ([XAMPP](https://www.apachefriends.org/download.html) recommended for easy-to-use)
     - Start the Apache server
     - Navigate to the project directory in your terminal with ```cd engaging```
     - Run `php artisan migrate:fresh --seed --force`
+    - In the `docker-compose.yml`, comment out the line `RUN php artisan migrate:fresh --seed --force`
+    - Start the containers with Docker Compose
