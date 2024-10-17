@@ -1,0 +1,82 @@
+# This docker file will build the Engaging Messenger application only
+# For building the database, refer the DbDockerFile
+
+# Use shinsenter's PHP and Nginx (bundled) runtime as a base image
+FROM shinsenter/phpfpm-nginx:latest
+
+# Set working directory
+WORKDIR /var/www/html
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl
+
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Copy application files
+COPY . /var/www/html
+
+# Install Node.js and npm (for Vite)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash -
+RUN apt-get install -y nodejs cron
+
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
+# Set NODE_ENV
+ARG NODE_ENV
+ENV NODE_ENV $NODE_ENV
+
+# Install Vite and Laravel dependencies
+RUN composer install --optimize-autoloader 
+RUN npm ci
+RUN npm run build
+
+# Remove node_modules (if present)
+RUN rm -rf node_modules/
+
+# Copy custom configuration custom.conf to Nginx's directory
+COPY ./nginx.conf /etc/nginx/custom.d/custom.conf
+
+# Set ownership permissions for www-data (user and group)
+RUN chown -R www-data:www-data /var/www/html/
+
+COPY ./migration_script.sh /usr/local/bin/migration_script.sh
+
+# Make the migration script executable
+RUN chmod +x /usr/local/bin/migration_script.sh
+
+# For some reason, after `npm run build`, the manifest file for
+# Vite is present in ./public/build/.vite
+# This creates an error when PHP tries to load the Vite Module for PHP
+# To avoid this, copy the manifest.json to ./public/build/
+RUN cp /var/www/html/public/build/.vite/manifest.json /var/www/html/public/build/
+
+# Remember to expose port 80
+EXPOSE 80
+
+# Create a .env file from .env.example
+COPY /var/www/html/.env.example /var/www/html/.env
+
+# Generate the application key
+RUN php artisan key:generate
+
+# Remove dead soft links
+RUN rmdir public/storage
+
+# Replace removed links with fresh one
+RUN php artisan storage:link
+
+# Start migration before everything
+ENTRYPOINT [ "/usr/local/bin/migration_script.sh" ]
+
+CMD php artisan reverb:start & nginx -g "daemon off;"
