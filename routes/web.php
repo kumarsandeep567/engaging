@@ -1,11 +1,12 @@
 <?php
 
-use App\Http\Controllers\GroupController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\UserController;
 
 /**
  * Allow verified users to access the dashboard
@@ -64,6 +65,26 @@ Route::middleware('auth')->group(function () {
 
     // Route to delete the user's profile
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+
+// Web route to force a database migration
+Route::get('/migrate', function () {
+    try {
+
+        // Invoke the artisan migration command
+        Artisan::call('migrate:custom');
+
+        return response()->json([
+            'message' => 'Migration successful!'
+        ], 200);
+
+    } catch (Exception $e) {
+        
+        return response()->json([
+            'message' => 'Migration failed: '
+        ], 500);
+    }
 });
 
 require __DIR__.'/auth.php';
